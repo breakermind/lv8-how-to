@@ -9,7 +9,7 @@ php artisan make:model Area --all
 
 ### Model, migration
 ```sh
-# utwórz model i migrację
+# Utwórz model i migrację
 php artisan make:model Area --migration
 ```
 
