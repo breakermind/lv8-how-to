@@ -7,7 +7,7 @@
 
 ### Php artisan
 
-### Uruchom lokalny serwer php
+#### Uruchom lokalny serwer php
 ```sh
 php artisan serv
 ```
