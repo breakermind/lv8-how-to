@@ -14,8 +14,8 @@ session.use_strict_mode=On
 session.use_only_cookies=On 
 session.cookie_httponly=On
 session.cookie_samesite="Strict"
-# https
-session.cookie_secure=On
+# Only with https
+# session.cookie_secure=On
 
 max_execution_time = 600 
 max_input_vars = 300 
