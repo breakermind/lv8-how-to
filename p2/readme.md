@@ -88,7 +88,7 @@ class CreateAreasTable extends Migration
 	{
 		Schema::create('areas', function (Blueprint $table) {
 			$table->id();
-			$table->unsignedBigInteger('restaurant_id');
+			$table->unsignedBigInteger('restaurant_id')->nullable(true);
 			$table->string('name')->default('');
 			$table->string('about')->default('');
 			$table->unsignedDecimal('min_order_cost',15,2)->default(0.00);
@@ -96,7 +96,8 @@ class CreateAreasTable extends Migration
 			$table->unsignedDecimal('free_from',15,2)->nullable()->default(0.00);
 			$table->tinyInteger('on_free_from')->nullable()->default(0);
 			$table->integer('time')->nullable()->default(60);
-			$table->polygon('polygon')->nullable(true); // $table->json('polygon')->default('{}');
+			$table->polygon('polygon')->nullable(true); 
+			$table->json('polygon_json')->default('{}');
 			$table->integer('sorting')->nullable()->default(0);
 			$table->tinyInteger('visible')->nullable()->default(1);
 			$table->timestamps();
