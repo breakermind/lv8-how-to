@@ -144,6 +144,16 @@ class AreaFactory extends Factory
 			'polygon' => '{"type": "Polygon", "coordinates": [[[21.01752050781249, 52.16553065086626], [21.018035491943348, 52.12265533376558], [21.079490264892566, 52.12697633873785], [21.06421240234374, 52.143413406069634], [21.052024444580066, 52.154473402050264], [21.043269714355457, 52.15647444111914], [21.032626708984363, 52.16711003359743], [21.01752050781249, 52.16553065086626]]]}',
 		];
 	}
+		
+	// Indicate that the area is visible.
+	public function hidden()
+	{
+		return $this->state(function (array $attributes) {
+			return [
+				'visible' => 0,
+			];
+		});
+	}
 }
 ```
 
@@ -161,6 +171,23 @@ use App\Models\Area;
 class AreaSeeder extends Seeder
 {
 	public function run()
+	{
+		// Single area
+		$this->run_single();
+		
+		// With relations
+		// $this->run_relations();
+	}
+	
+	public function run_single()
+	{
+		$a = Area::factory()->count(3)->create([
+			// Change restaurant id
+			'restaurant_id' => null
+		]);
+	}
+	
+	public function run_relations()
 	{
 		// Get all restaurants
 		$r = Restaurant::all();
