@@ -253,7 +253,8 @@ class UpdateAreaRequest extends FormRequest
 	}
 
 	public function rules()
-	{
+	{	
+		// Get url param
 		$area = $this->route('area');
 
 		return [
