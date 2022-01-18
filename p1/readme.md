@@ -1,4 +1,4 @@
-# Laravel Exceptions Handler
+# Exceptions Handler
 Przechwytywanie i logowanie błędów w aplikacji.
 
 ### File
