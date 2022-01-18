@@ -1,14 +1,19 @@
 # Mysql polygon area
 
-### Point or polygon
+### Polygon, point with geo_json
+```json
+{"type":"Polygon","coordinates":[[[20.834158077340533,52.11296920104141],[21.034658565621783,52.385376972929855],[21.397207393746783,52.15848668447624],[20.834158077340533,52.11296920104141]]]}
+
+{"type": "Point", "coordinates": [11.11, 12.22]}
+```
+
+### Point
 ```sql
 1. SELECT ST_AsGeoJSON(ST_GeomFromText('POINT(11.11111 12.22222)'),6);
 
 2. SET @json = '{"type": "Point", "coordinates": [11.11, 12.22]}';
 
 3. SELECT ST_GeomFromGeoJSON(@json);
-
-4. {"type":"Polygon","coordinates":[[[20.834158077340533,52.11296920104141],[21.034658565621783,52.385376972929855],[21.397207393746783,52.15848668447624],[20.834158077340533,52.11296920104141]]]}
 
 # Aws redshift 
 1. SELECT ST_Contains(ST_GeomFromText('POLYGON((0 2,1 1,0 -1,0 2))'), ST_GeomFromText('POLYGON((-1 3,2 1,0 -3,-1 3))'));
