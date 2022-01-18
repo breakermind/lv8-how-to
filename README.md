@@ -33,17 +33,16 @@ php artisan make:resource PostResource
 # Utwórz tablki
 php artisan migrate
 php artisan migrate:fresh
-php artisan migrate:fresh --path=/databases/migrations/123456_file_name.php
+php artisan migrate:fresh --path=/database/migrations/123456_create_user_table.php
 
 # Utwórz tablki do testów
 php artisan --env=testing migrate
 php artisan --env=testing migrate:fresh
-php artisan --env=testing migrate:fresh --path=/databases/migrations/123456_file_name.php
+php artisan --env=testing migrate:fresh --path=/database/migrations/123456_create_user_table.php
 ```
 
 #### Publikacja konfiguracja pakietu
 ```sh
 php artisan vendor:publish --provider="Webi\WebiServiceProvider.php"
-
 php artisan vendor:publish --tag=webi-config --force
 ```
