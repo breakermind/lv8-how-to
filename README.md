@@ -33,12 +33,12 @@ php artisan make:resource PostResource
 # Utwórz tablki
 php artisan migrate
 php artisan migrate:fresh
-php artisan migrate:fresh --path=/database/migrations/123456_create_user_table.php
+php artisan migrate:fresh --path=/database/migrations/123456_create_user_table.php --force
 
 # Utwórz tablki do testów
 php artisan --env=testing migrate
 php artisan --env=testing migrate:fresh
-php artisan --env=testing migrate:fresh --path=/database/migrations/123456_create_user_table.php
+php artisan --env=testing migrate:fresh --path=/database/migrations/123456_create_user_table.php --force
 ```
 
 #### Publikacja konfiguracja pakietu
