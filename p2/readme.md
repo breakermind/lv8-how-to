@@ -74,7 +74,7 @@ class Area extends Model
 ```
 
 ### Area model class migration
-database/migrations
+database/migrations/9000_01_01_100001_create_areas_table.php
 ```php
 <?php
 
