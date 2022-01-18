@@ -1,7 +1,7 @@
 # Model
 Tworzenie modelu klasy w laravel.
 
-### Model, controller, requests, policy, facroty, seeder, migrations ...
+### Model, controller, requests, policy, facroty, seeder, migration
 ```sh
 # Utwórz wszystkie klasy
 php artisan make:model Area --all
