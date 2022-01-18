@@ -37,10 +37,17 @@ class AreaController extends Controller
 	public function index()
 	{
 		$search = "" . app()->request->input('search');
-
+		
+		// $a = Area::whereRaw("CONCAT_WS(' ','name', 'about') regex ?", [str_replace(" ","|",$search)]);
+		
 		$a = Area::where(
-			DB::raw("CONCAT_WS(' ','name', 'about')"), 'regexp', str_replace(" ","|",$search)
-		)->orderBy("id", 'desc')->simplePaginate($this->perpage())->withQueryString();
+			DB::raw("CONCAT_WS(' ','name', 'about')"),
+			'regexp',
+			str_replace(" ","|",$search)
+		)
+		->orderBy("id", 'desc')
+		->simplePaginate($this->perpage())
+		->withQueryString();
 
 		return ['areas' => $a]; // $a->items()
 	}
