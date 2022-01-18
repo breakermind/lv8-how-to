@@ -1,17 +1,18 @@
 # Model
+Tworzenie modelu klasy w laravel.
 
-### Create Model class with controller, requests, policy, facroty, seeder, migrations ...
+### Model, controller, requests, policy, facroty, seeder, migrations ...
 ```sh
 # Create
 php artisan make:model --all
 ```
 
-### Create only Model class
+### Model, migration
 ```sh
-php artisan make:model Area
+php artisan make:model Area --migration
 ```
 
-### Area model class
+### Klasa modelu Area
 app/Models/Area.php
 ```php
 <?php
@@ -73,8 +74,8 @@ class Area extends Model
 }
 ```
 
-### Area Factory
-database/factories/AReaFactory.php
+### Klasa AreaFactory
+database/factories/AreaFactory.php
 ```php
 <?php
 
@@ -113,7 +114,7 @@ class AreaFactory extends Factory
 }
 ```
 
-### Area Seeder
+### Klasa AreaSeeder
 database/seeders/AreaSeeder.php
 ```php
 <?php
@@ -163,7 +164,7 @@ class AreaSeeder extends Seeder
 }
 ```
 
-### Area model class migration
+### Klasa migracji bazy danych dla modelu Area
 database/migrations/9000_01_01_100001_create_areas_table.php
 ```php
 <?php
@@ -207,7 +208,7 @@ class CreateAreasTable extends Migration
 }
 ```
 
-### Run migrations
+### Utwórz tabelki w bazie danych
 ```sh
 # Single file
 php artisan migrate:fresh --path=/database/migrations/9000_01_01_100001_create_areas_table.php
