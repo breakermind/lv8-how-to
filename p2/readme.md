@@ -73,50 +73,6 @@ class Area extends Model
 }
 ```
 
-### Area model class migration
-database/migrations/9000_01_01_100001_create_areas_table.php
-```php
-<?php
-
-use Illuminate\Database\Migrations\Migration;
-use Illuminate\Database\Schema\Blueprint;
-use Illuminate\Support\Facades\Schema;
-
-class CreateAreasTable extends Migration
-{	
-	public function up()
-	{
-		Schema::create('areas', function (Blueprint $table) {
-			$table->id();
-			$table->unsignedBigInteger('restaurant_id')->nullable(true);
-			$table->string('name')->default('');
-			$table->string('about')->default('');
-			$table->unsignedDecimal('min_order_cost',15,2)->default(0.00);
-			$table->unsignedDecimal('cost',15,2)->default(0.00);
-			$table->unsignedDecimal('free_from',15,2)->nullable()->default(0.00);
-			$table->tinyInteger('on_free_from')->nullable()->default(0);
-			$table->integer('time')->nullable()->default(60);
-			$table->polygon('polygon')->nullable(true); // $table->json('polygon_json')->default('{}');			
-			$table->integer('sorting')->nullable()->default(0);
-			$table->tinyInteger('visible')->nullable()->default(1);
-			$table->timestamps();
-			$table->softDeletes();
-
-			$table->unique(['name','restaurant_id']);
-			$table->foreign('restaurant_id')->references('id')->on('restaurants')->onUpdate('cascade')->onDelete('cascade');
-			
-			// 8.x
-			// $table->foreignId('restaurant_id')->constrained('restaurants', 'id')->onUpdate('cascade')->onDelete('cascade');
-		});
-	}
-
-	public function down()
-	{
-		Schema::dropIfExists('areas');
-	}
-}
-```
-
 ### Area Factory
 database/factories/AReaFactory.php
 ```php
@@ -205,4 +161,64 @@ class AreaSeeder extends Seeder
 		});
 	}
 }
+```
+
+### Area model class migration
+database/migrations/9000_01_01_100001_create_areas_table.php
+```php
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+class CreateAreasTable extends Migration
+{	
+	public function up()
+	{
+		Schema::create('areas', function (Blueprint $table) {
+			$table->id();
+			$table->unsignedBigInteger('restaurant_id')->nullable(true);
+			$table->string('name')->default('');
+			$table->string('about')->default('');
+			$table->unsignedDecimal('min_order_cost',15,2)->default(0.00);
+			$table->unsignedDecimal('cost',15,2)->default(0.00);
+			$table->unsignedDecimal('free_from',15,2)->nullable()->default(0.00);
+			$table->tinyInteger('on_free_from')->nullable()->default(0);
+			$table->integer('time')->nullable()->default(60);
+			$table->polygon('polygon')->nullable(true); // $table->json('polygon_json')->default('{}');			
+			$table->integer('sorting')->nullable()->default(0);
+			$table->tinyInteger('visible')->nullable()->default(1);
+			$table->timestamps();
+			$table->softDeletes();
+
+			$table->unique(['name','restaurant_id']);
+			$table->foreign('restaurant_id')->references('id')->on('restaurants')->onUpdate('cascade')->onDelete('cascade');
+			
+			// 8.x
+			// $table->foreignId('restaurant_id')->constrained('restaurants', 'id')->onUpdate('cascade')->onDelete('cascade');
+		});
+	}
+
+	public function down()
+	{
+		Schema::dropIfExists('areas');
+	}
+}
+```
+
+### Run migrations
+```sh
+# Single file
+php artisan migrate:fresh --path=/database/migrations/9000_01_01_100001_create_areas_table.php
+
+# All files
+php artisan migrate
+php artisan migrate:fresh
+
+# Refresh
+php artisan migrate:refresh
+
+# Help
+php artisan help migrate
 ```
