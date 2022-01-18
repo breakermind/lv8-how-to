@@ -18,7 +18,7 @@ php artisan make:model Post --all
 php artisan make:resource PostResource
 ```
 
-#### utwórz tylko model i migrację
+#### Utwórz tylko model i migrację
 ```sh
 php artisan make:model Area --migration
 ```
