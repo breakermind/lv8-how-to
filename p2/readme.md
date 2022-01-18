@@ -1,10 +1,5 @@
 # Model
 
-### File
-```sh
-app/Models/Area.php
-```
-
 ### Create Model class with controller, requests, policy, facroty, seeder, migrations ...
 ```sh
 # Create
@@ -17,6 +12,7 @@ php artisan make:model Area
 ```
 
 ### Area model class
+app/Models/Area.php
 ```php
 <?php
 
@@ -78,6 +74,7 @@ class Area extends Model
 ```
 
 ### Area model class migration
+database/migrations
 ```php
 <?php
 
@@ -94,11 +91,11 @@ class CreateAreasTable extends Migration
 			$table->unsignedBigInteger('restaurant_id');
 			$table->string('name')->default('');
 			$table->string('about')->default('');
-			$table->unsignedDecimal('min_order_cost',15,2)->default(0.00); // Delivery min order cost
-			$table->unsignedDecimal('cost',15,2)->default(0.00); // Delivery cost
-			$table->unsignedDecimal('free_from',15,2)->nullable()->default(0.00); // Delivery free from price
-			$table->tinyInteger('on_free_from')->nullable()->default(0); // Enable free from delivery
-			$table->integer('time')->nullable()->default(60); // Delivery time
+			$table->unsignedDecimal('min_order_cost',15,2)->default(0.00);
+			$table->unsignedDecimal('cost',15,2)->default(0.00);
+			$table->unsignedDecimal('free_from',15,2)->nullable()->default(0.00);
+			$table->tinyInteger('on_free_from')->nullable()->default(0);
+			$table->integer('time')->nullable()->default(60);
 			$table->polygon('polygon')->nullable(true); // $table->json('polygon')->default('{}');
 			$table->integer('sorting')->nullable()->default(0);
 			$table->tinyInteger('visible')->nullable()->default(1);
@@ -107,6 +104,9 @@ class CreateAreasTable extends Migration
 
 			$table->unique(['name','restaurant_id']);
 			$table->foreign('restaurant_id')->references('id')->on('restaurants')->onUpdate('cascade')->onDelete('cascade');
+			
+			// 8.x
+			// $table->foreignId('restaurant_id')->constrained('restaurants', 'id')->onUpdate('cascade')->onDelete('cascade');
 		});
 	}
 
