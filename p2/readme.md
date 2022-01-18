@@ -5,12 +5,14 @@ Tworzenie modelu klasy w laravel.
 ```sh
 # Utwórz wszystkie klasy
 php artisan make:model Area --all
+php artisan make:model Area -a
 ```
 
 ### Model, migration
 ```sh
 # Utwórz model i migrację
 php artisan make:model Area --migration
+php artisan make:model Area -m
 ```
 
 ### Klasa modelu Area
