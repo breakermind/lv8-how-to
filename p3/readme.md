@@ -1,5 +1,10 @@
 # Controller, Requests, Policy, Resource
 
+### Utwórz klasę resource
+```sh
+php artisan make:resource AreaResource
+```
+
 ### Controller
 app/Http/Controllers/AreaController.php
 ```php
