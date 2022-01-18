@@ -5,14 +5,14 @@
 3. <a href="https://github.com/breakermind/how/tree/main/p3"> Controller, Policy, Request Validation, Resource </a>
 
 
-## Php artisan
+### Php artisan
 
-### Symboli link ze storage do public/storage (upload plików)
+#### Symboli link ze storage do public/storage (upload plików)
 ```sh
 php artisan storage:link
 ```
 
-### Wyświetl listę routes aplikacji
+#### Wyświetl listę routes aplikacji
 ```sh
 php artisan route:list
 ```
