@@ -224,6 +224,11 @@ class StoreAreaRequest extends FormRequest
 			'time' => 'sometimes|numeric',
 			'sorting' => 'sometimes|boolean',
 			'visible' => 'sometimes|boolean',
+			
+			// 'date_of_birth' => 'required|date_format:Y-m-d',
+			// 'school_id' => 'required|exists:schools,id',
+			// 'file' => 'image|mimes:jpg,jpeg,png',
+               		// 'contact_no' => 'regex:/^[-0-9\+]+$/',
 		];
 	}
 
