@@ -18,6 +18,11 @@ php artisan make:model Post --all
 php artisan make:resource PostResource
 ```
 
+#### utwórz tylko model i migrację
+```sh
+php artisan make:model Area --migration
+```
+
 #### Dowiązanie symboliczne z storage do public/storage (upload plików)
 ```sh
 php artisan storage:link
