@@ -149,7 +149,7 @@ class AreaFactory extends Factory
 
 ### Area Seeder
 database/seeders/AreaSeeder.php
-``php
+```php
 <?php
 
 namespace Database\Seeders;
