@@ -18,7 +18,7 @@ php artisan make:model Post --all
 php artisan make:resource PostResource
 ```
 
-#### Dowiązanie symboliczne ze storage do public/storage (upload plików)
+#### Dowiązanie symboliczne z storage do public/storage (upload plików)
 ```sh
 php artisan storage:link
 ```
