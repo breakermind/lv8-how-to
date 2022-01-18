@@ -14,10 +14,6 @@
 2. SET @json = '{"type": "Point", "coordinates": [11.11, 12.22]}';
 
 3. SELECT ST_GeomFromGeoJSON(@json);
-
-# Aws redshift 
-1. SELECT ST_Contains(ST_GeomFromText('POLYGON((0 2,1 1,0 -1,0 2))'), ST_GeomFromText('POLYGON((-1 3,2 1,0 -3,-1 3))'));
-2. SELECT ST_Distance(ST_GeogFromText('point(1 1)'),ST_GeogFromText('point( -21.32 121.2)';
 ```
 
 ### Distance
@@ -33,4 +29,10 @@ SELECT a.name, b.name, st_distance(a.geo, b.geo) FROM cities a, cities b;
 SELECT a.name, b.name, ST_DISTANCE_SPHERE(a.geo, b.geo) FROM cities a, cities b;
 -- this shows the distance in km:
 SELECT a.name, b.name, ST_DISTANCE_SPHERE(a.geo, b.geo) * .001 FROM cities a, cities b;
+```
+
+# Aws redshift 
+```sql
+1. SELECT ST_Contains(ST_GeomFromText('POLYGON((0 2,1 1,0 -1,0 2))'), ST_GeomFromText('POLYGON((-1 3,2 1,0 -3,-1 3))'));
+2. SELECT ST_Distance(ST_GeogFromText('point(1 1)'),ST_GeogFromText('point( -21.32 121.2)';
 ```
