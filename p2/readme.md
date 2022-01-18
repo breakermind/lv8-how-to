@@ -96,8 +96,7 @@ class CreateAreasTable extends Migration
 			$table->unsignedDecimal('free_from',15,2)->nullable()->default(0.00);
 			$table->tinyInteger('on_free_from')->nullable()->default(0);
 			$table->integer('time')->nullable()->default(60);
-			$table->polygon('polygon')->nullable(true); 
-			$table->json('polygon_json')->default('{}');
+			$table->polygon('polygon')->nullable(true); // $table->json('polygon_json')->default('{}');			
 			$table->integer('sorting')->nullable()->default(0);
 			$table->tinyInteger('visible')->nullable()->default(1);
 			$table->timestamps();
@@ -114,6 +113,69 @@ class CreateAreasTable extends Migration
 	public function down()
 	{
 		Schema::dropIfExists('areas');
+	}
+}
+```
+
+### Area Factory
+database/factories/AReaFactory.php
+```php
+<?php
+
+namespace Database\Factories;
+
+use Illuminate\Database\Eloquent\Factories\Factory;
+use App\Models\Area;
+
+class AreaFactory extends Factory
+{	
+	// Model for factory
+	protected $model = Area::class;
+
+	// Define the model's default state.
+	public function definition()
+	{
+		return [
+			'restaurant_id' => null,
+			'name' => 'Area '. uniqid(),
+			'about' => $this->faker->sentence(),
+			'min_order_cost' => $this->faker->randomFloat(),
+			'cost' => $this->faker->randomFloat(),			
+			'polygon' => '{"type": "Polygon", "coordinates": [[[21.01752050781249, 52.16553065086626], [21.018035491943348, 52.12265533376558], [21.079490264892566, 52.12697633873785], [21.06421240234374, 52.143413406069634], [21.052024444580066, 52.154473402050264], [21.043269714355457, 52.15647444111914], [21.032626708984363, 52.16711003359743], [21.01752050781249, 52.16553065086626]]]}',
+		];
+	}
+}
+```
+
+### Area Seeder
+database/seeders/AreaSeeder.php
+``php
+<?php
+
+namespace Database\Seeders;
+
+use Illuminate\Database\Seeder;
+use App\Models\Restaurant;
+use App\Models\Area;
+
+class AreaSeeder extends Seeder
+{
+	public function run()
+	{
+		// Get all restaurants
+		$r = Restaurant::all();
+		
+		 // Add restaurant areas
+		$r->each(function($o) {
+			// Areas
+			$a = Area::factory()->count(rand(1,3))->make([
+				// Change restaurant id
+				'restaurant_id' => $o->id
+			]);
+			
+			// Bind to restaurant
+			$o->areas()->saveMany($a);
+		});
 	}
 }
 ```
