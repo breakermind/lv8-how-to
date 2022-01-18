@@ -7,7 +7,7 @@
 
 ### Php artisan
 
-#### Symboli link ze storage do public/storage (upload plików)
+#### Dowiązanie symboliczne ze storage do public/storage (upload plików)
 ```sh
 php artisan storage:link
 ```
@@ -15,4 +15,10 @@ php artisan storage:link
 #### Wyświetl listę routes aplikacji
 ```sh
 php artisan route:list
+```
+
+#### Utwórz wszystkie klasy dla modelu
+```sh
+php artisan make:model Post --all
+php artisan make:resource PostResource
 ```
