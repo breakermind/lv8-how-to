@@ -1,6 +1,6 @@
 ### Virtual host
 /etc/nginx/sites-enabled/app.xx.conf
-```conf
+```cnf
 server {
 	listen 80;
 	listen [::]:80;
