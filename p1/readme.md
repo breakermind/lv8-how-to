@@ -260,10 +260,10 @@ class VerifyCsrfToken extends Middleware
 #### Csrf token w javascript
 ```blade
 <head>
-	<meta name="csrf-token" content="{{ csrf_token() }}">
+	<meta name="csrf" content="{{ csrf_token() }}">
 	
 	<script>
-		let csrf = document.querySelector('meta[name="csrf-token"]').content;
+		let csrf = document.querySelector('meta[name="csrf"]').content;
 		
 		console.log("X-CSRF-Token", csrf);
 	</script>
