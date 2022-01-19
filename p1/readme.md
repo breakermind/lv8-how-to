@@ -183,10 +183,27 @@ protected $routeMiddleware = [
 ];
 ```
 
-#### Routes - Wykorzystanie w procesie autoryzacji
+#### Routes - Pojedyńcze adresy internetowe (route urls)
+```php
+// Wykorzystanie w procesie autoryzacji
+Route::get('/profile', function () {
+	response()->json([
+		'message' => 'User profil',
+		'user' => [
+			'id' => 1,
+			'name' => 'Alice'
+		]
+	]);
+})->middleware([
+	'auth',
+	'role:admin|worker|user'
+]); // Zalogowany użytkownik
+```
+
+#### Routes - Grupowanie url
 ```php
 <?php
-// Pogrupowane (Url np: /web/api/version )
+// Dla adresów internetowych: /web/api/*
 Route::prefix('web/api')->name('web.api.')->middleware(['web'])->group(function() {
 	
 	// Linki publiczne	
@@ -211,20 +228,6 @@ Route::prefix('web/api')->name('web.api.')->middleware(['web'])->group(function(
 		// Route::get('/test/admin', [AdminController::class, 'test'])->name('test.admin');
 	});
 });
-
-// Lub pojedyńczo
-Route::get('/profile', function () {	
-	response()->json([
-		'message' => 'User profil',
-		'user' => [
-			'id' => 1,
-			'name' => 'Alice'
-		]
-	]);
-})->middleware([
-	'auth',
-	'role:admin|worker|user'
-]); // Zalogowany użytkownik
 ```
 
 ### Csrf Token
