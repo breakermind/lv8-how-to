@@ -45,7 +45,7 @@ php artisan storage:link
 php artisan route:list
 ```
 
-### Utwórz migrację modelu
+#### Utwórz migrację modelu
 ```sh
 php artisan make:migration update_user_table
 ```
