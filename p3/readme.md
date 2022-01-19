@@ -63,11 +63,6 @@ class AreaController extends Controller
 		// Authorize here or from controller (sample)
 		// $this->authorize('create', Area::class);
 		
-		// Or with Request $request (sample)
-		// if ($request->user()->cannot('create', $area)) {
-		//	abort(403);
-		// }
-		
 		try {
 			$v = $request->validated();
 			$v['deleted_at'] = NULL;
@@ -104,6 +99,11 @@ class AreaController extends Controller
 
 	public function update(UpdateAreaRequest $request, Area $area)
 	{
+		// Or with Request $request (sample)
+		// if ($request->user()->cannot('update', $area)) {
+		//	abort(403);
+		// }
+		
 		try {
 			$v = $request->validated();
 			$area->forceFill($v);
