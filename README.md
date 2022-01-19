@@ -1,6 +1,6 @@
 # Jak to działa w Laravel
 
-1. <a href="https://github.com/breakermind/how/tree/main/p1"> Exceptions Handler, Middleware </a>
+1. <a href="https://github.com/breakermind/how/tree/main/p1"> Exceptions Handler, Middleware, CSRF Token </a>
 2. <a href="https://github.com/breakermind/how/tree/main/p2"> Model, Factory, Seeder, Migration </a>
 3. <a href="https://github.com/breakermind/how/tree/main/p3"> Controller, Policy, Request Validation, Resource </a>
 4. <a href="https://github.com/breakermind/how/tree/main/p4"> Model Relations, Pivot Tables </a>
