@@ -53,6 +53,8 @@ php artisan make:migration update_user_table
 #### Utwórz queue tabelę
 ```sh
 php artisan queue:table
+
+# php artisan queue:failed-table
 ```
 
 #### Migracja tabel do bazy danych
