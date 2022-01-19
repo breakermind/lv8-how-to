@@ -68,6 +68,11 @@ class Handler extends ExceptionHandler
 ```
 ### Middleware
 
+#### Utwórz migrację modelu
+```sh
+php artisan make:migration update_users_table
+```
+
 #### Dodaj kolumny do modelu User
 database/migrations/9000_01_01_100002_update_users_table.php
 ```php
