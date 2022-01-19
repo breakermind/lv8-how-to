@@ -1,12 +1,10 @@
-# Exceptions Handler
+# Exceptions Handler, Middleware
 Przechwytywanie i logowanie błędów w aplikacji.
 
-### File
-```sh
-app/Exceptions/Handler.php
-```
+### Exceptions Handler
 
-### Json Handler
+#### Json Errors
+app/Exceptions/Handler.php
 ```php
 <?php
 
@@ -67,4 +65,154 @@ class Handler extends ExceptionHandler
 		return array_pop($path);
 	}
 }
+```
+### Middleware
+
+#### Dodaj columnę role w modelu User
+database/migrations/9000_01_01_100002_update_users_table.php
+```php
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+class UpdateUsersTable extends Migration
+{
+	/**
+	 * Run the migrations.
+	 *
+	 * @return void
+	 */
+	public function up()
+	{
+		Schema::table('users', function (Blueprint $table) 
+		{			
+			if (!Schema::hasColumn('users', 'role')) {
+				$table->enum('role', ['user','worker','admin'])->nullable()->default('user');
+			}
+			
+			if (!Schema::hasColumn('users', 'email_verified_at')) {
+				$table->timestamp('email_verified_at')->nullable(true);
+			}
+			
+			if (!Schema::hasColumn('users', 'code')) {
+				$table->string('code', 128)->unique()->nullable(true);
+			}
+			
+			if (!Schema::hasColumn('users', 'ip')) {
+				$table->string('ip')->nullable(true);
+			}
+			
+			if (!Schema::hasColumn('users', 'remember_token')) {
+				$table->string('remember_token')->nullable(true);
+			}
+			
+			if (!Schema::hasColumn('users', 'deleted_at')) {
+				$table->softDeletes();
+			}
+		});
+	}
+
+	/**
+	 * Reverse the migrations.
+	 *
+	 * @return void
+	 */
+	public function down()
+	{
+		Schema::table('users', function (Blueprint $table) {
+			$table->dropColumn(['code', 'ip', 'role', 'remember_token', 'deleted_at']);
+		});
+	}
+}
+```
+
+#### Uprawnienia użytkownika z parametrami
+app/Http/Middleware/AuthenticateRoles.php
+```php
+<?php
+
+namespace App\Http\Middleware;
+
+use Closure;
+use Exception;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Http\Request;
+
+class AuthenticateRoles
+{
+	/**
+	 * Handle an incoming request.
+	 *
+	 * @param  \Illuminate\Http\Request  $request
+	 * @param  \Closure(\Illuminate\Http\Request): (\Illuminate\Http\Response|\Illuminate\Http\RedirectResponse)  $next
+	 * @return \Illuminate\Http\Response|\Illuminate\Http\RedirectResponse
+	 */
+	public function handle(Request $request, Closure $next, $role = '')
+	{
+		$roles = array_filter(explode('|', trim($role)));
+
+		if (! empty($roles)) {
+			if (Auth::check()) {
+				$user = Auth::user();
+
+				if (!in_array($user->role, $roles)) {
+					throw new Exception("Unauthorized Role", 401);
+				}
+			} else {
+				throw new Exception("Unauthorized User", 401);
+			}
+		}
+
+		return $next($request);
+	}
+}
+```
+
+#### Rejestracja middleware
+app/Http/Kernel.php
+```php
+<?php
+protected $routeMiddleware = [
+	'role' => \App\Http\Middleware\AuthenticateRoles::class,
+];
+```
+
+#### Wykorzystanie w procesie autoryzacji
+```php
+<?php
+// Pogrupowane
+Route::prefix('web/api')->name('web.api.')->middleware(['web'])->group(function() {
+	
+	// Linki publiczne	
+	// Route::get('/version', [UserController::class, 'version'])->name('version');
+	
+	// Linki prywatne, zalogowani użytkownicy
+	Route::middleware(['auth', 'role:admin|worker|user'])->group(function () {
+		// Route::get('/test/user', [UserController::class, 'test'])->name('test.user');
+		// Route::get('/logout', [UserController::class, 'logout'])->name('logout');		
+	});
+
+	// Linki prywatne, tylko admin i worker
+	Route::middleware(['auth', 'role:admin|worker'])->group(function () {
+		// Route::get('/test/worker', [WorkerController::class, 'test'])->name('test.worker');
+	});
+	
+	// Linki prywatne, tylko admin
+	Route::middleware(['auth', 'role:admin'])->group(function () {
+		// Route::get('/test/admin', [AdminController::class, 'test'])->name('test.admin');
+	});
+}
+
+// Lub pojedyńczo
+Route::get('/profile', function () {	
+	response()->json([
+		'message' => 'User profil',
+		'user' => [
+			'id' => 1,
+			'name' => 'Ala'
+		]
+	]);
+})->middleware(['auth', 'role:admin|worker|user']); // Zalogowany użytkownik
 ```
