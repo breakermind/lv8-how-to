@@ -95,7 +95,7 @@ class UpdateUsersTable extends Migration
 		{	
 			// $table->engine = 'InnoDB';
 			// $table->charset = 'utf8mb4';
-    			// $table->collation = 'utf8mb4_unicode_ci';
+			// $table->collation = 'utf8mb4_unicode_ci';
     
 			if (!Schema::hasColumn('users', 'role')) {
 				$table->enum('role', ['user','worker','admin'])->nullable()->default('user');
