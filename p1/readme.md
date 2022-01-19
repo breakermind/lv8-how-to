@@ -186,7 +186,7 @@ protected $routeMiddleware = [
 #### Routes - Pojedyńcze adresy internetowe (route urls)
 routes/web.php
 ```php
-// Wykorzystanie w procesie autoryzacji
+// Zalogowany użytkownik
 Route::get('/profile', function () {
 	response()->json([
 		'message' => 'User profil',
@@ -198,7 +198,7 @@ Route::get('/profile', function () {
 })->middleware([
 	'auth',
 	'role:admin|worker|user'
-]); // Zalogowany użytkownik
+]); 
 ```
 
 #### Routes - Grupowanie url
