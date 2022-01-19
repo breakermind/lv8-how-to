@@ -194,8 +194,8 @@ Route::prefix('web/api')->name('web.api.')->middleware(['web'])->group(function(
 	
 	// Linki prywatne, zalogowani użytkownicy
 	Route::middleware(['auth', 'role:admin|worker|user'])->group(function () {
+		// Route::get('/logout', [UserController::class, 'logout'])->name('logout');
 		// Route::get('/test/user', [UserController::class, 'test'])->name('test.user');
-		// Route::get('/logout', [UserController::class, 'logout'])->name('logout');		
 	});
 
 	// Linki prywatne, tylko admin i worker
@@ -215,8 +215,11 @@ Route::get('/profile', function () {
 		'message' => 'User profil',
 		'user' => [
 			'id' => 1,
-			'name' => 'Ala'
+			'name' => 'Alice'
 		]
 	]);
-})->middleware(['auth', 'role:admin|worker|user']); // Zalogowany użytkownik
+})->middleware([
+	'auth',
+	'role:admin|worker|user'
+]); // Zalogowany użytkownik
 ```
