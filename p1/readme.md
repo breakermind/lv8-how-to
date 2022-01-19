@@ -68,7 +68,7 @@ class Handler extends ExceptionHandler
 ```
 ### Middleware
 
-#### Dodaj columnę role w modelu User
+#### Dodaj kolumny do modelu User
 database/migrations/9000_01_01_100002_update_users_table.php
 ```php
 <?php
@@ -92,6 +92,11 @@ class UpdateUsersTable extends Migration
 				$table->enum('role', ['user','worker','admin'])->nullable()->default('user');
 			}
 			
+			
+			if (!Schema::hasColumn('users', 'remember_token')) {
+				$table->string('remember_token')->nullable(true);
+			}
+			
 			if (!Schema::hasColumn('users', 'email_verified_at')) {
 				$table->timestamp('email_verified_at')->nullable(true);
 			}
@@ -102,11 +107,7 @@ class UpdateUsersTable extends Migration
 			
 			if (!Schema::hasColumn('users', 'ip')) {
 				$table->string('ip')->nullable(true);
-			}
-			
-			if (!Schema::hasColumn('users', 'remember_token')) {
-				$table->string('remember_token')->nullable(true);
-			}
+			}			
 			
 			if (!Schema::hasColumn('users', 'deleted_at')) {
 				$table->softDeletes();
@@ -128,7 +129,7 @@ class UpdateUsersTable extends Migration
 }
 ```
 
-#### Uprawnienia użytkownika z parametrami
+#### Middleware uprawnienia użytkownika z parametrami
 app/Http/Middleware/AuthenticateRoles.php
 ```php
 <?php
