@@ -30,6 +30,11 @@ php artisan make:model Area --migration
 php artisan make:middleware UserRoles
 ```
 
+#### Utwórz email
+```sh
+php artisan make:mail NewsletterMail
+```
+
 #### Dowiązanie symboliczne z storage do public/storage (upload plików)
 ```sh
 php artisan storage:link
