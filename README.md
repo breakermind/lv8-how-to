@@ -63,7 +63,7 @@ php artisan --env=testing migrate:fresh
 php artisan --env=testing migrate:fresh --path=/database/migrations/123456_create_user_table.php --force
 ```
 
-#### Job worker
+#### Harmonogram pracy (cron job worker)
 ```sh
 php artisan schedule:work
 ```
