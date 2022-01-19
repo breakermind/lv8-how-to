@@ -68,12 +68,12 @@ class Handler extends ExceptionHandler
 ```
 ### Middleware
 
-#### Utwórz migrację modelu
+#### Migration - Utwórz migrację modelu
 ```sh
 php artisan make:migration update_users_table
 ```
 
-#### Dodaj kolumny do modelu User
+#### Table Schema - Dodaj kolumny do tabeli modelu User
 database/migrations/9000_01_01_100002_update_users_table.php
 ```php
 <?php
@@ -132,7 +132,7 @@ class UpdateUsersTable extends Migration
 }
 ```
 
-#### Middleware uprawnienia użytkownika z parametrami
+#### Middleware - Uprawnienia użytkownika z parametrami
 app/Http/Middleware/AuthenticateRoles.php
 ```php
 <?php
@@ -174,7 +174,7 @@ class AuthenticateRoles
 }
 ```
 
-#### Rejestracja middleware
+#### Kernel - Rejestracja middleware applikacji
 app/Http/Kernel.php
 ```php
 <?php
@@ -183,7 +183,7 @@ protected $routeMiddleware = [
 ];
 ```
 
-#### Wykorzystanie w procesie autoryzacji
+#### Routes - Wykorzystanie w procesie autoryzacji
 ```php
 <?php
 // Pogrupowane
