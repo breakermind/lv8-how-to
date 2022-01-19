@@ -1,4 +1,4 @@
-# Model
+# Model, Factory, Seeder, Migration
 Tworzenie modelu klasy w laravel.
 
 ### Model, controller, requests, policy, facroty, seeder, migration
