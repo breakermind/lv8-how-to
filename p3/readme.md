@@ -1,6 +1,7 @@
 # Controller, Requests, Policy, Resource
+Kontroler aplikacji z autoryzacją użytkownika.
 
-### Utwórz klasę resource
+### Utwórz klasę dla resource
 ```sh
 php artisan make:resource AreaResource
 ```
