@@ -1,4 +1,4 @@
-# Exceptions Handler, Middleware, CSRF Token
+# Exceptions Handler, Middleware Roles, CSRF Token
 Przechwytywanie i logowanie błędów w aplikacji.
 
 ### Exceptions Handler
