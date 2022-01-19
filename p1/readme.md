@@ -232,6 +232,20 @@ Route::prefix('web/api')->name('web.api.')->middleware(['web'])->group(function(
 
 ### Csrf Token
 
+
+#### Pobierz token w javascript
+```blade
+<head>
+	<meta name="csrf-token" content="{{ csrf_token() }}">
+	
+	<script>
+		let csrf = document.querySelector('meta[name="csrf-token"]').content;
+		
+		console.log("X-CSRF-Token", csrf);
+	</script>
+</head>
+```
+
 #### Wyłącz ochronę csrf dla tras
 ```php
 <?php
