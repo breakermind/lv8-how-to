@@ -1,4 +1,4 @@
-# Controller, Requests, Policy, Resource
+# Controller, Request Validation, Policy, Resource
 Kontroler aplikacji z autoryzacją użytkownika.
 
 ### Utwórz klasę dla resource
@@ -209,7 +209,7 @@ class AreaPolicy
 }
 ```
 
-### Request Store
+### Request Validation
 app/Http/Requests/StoreAreaRequest.php
 ```php
 <?php
