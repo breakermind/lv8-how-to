@@ -1,4 +1,4 @@
-# Exceptions Handler, Middleware
+# Exceptions Handler, Middleware, CSRF Token
 Przechwytywanie i logowanie błędów w aplikacji.
 
 ### Exceptions Handler
@@ -186,11 +186,14 @@ protected $routeMiddleware = [
 #### Routes - Wykorzystanie w procesie autoryzacji
 ```php
 <?php
-// Pogrupowane
+// Pogrupowane (Url np: /web/api/version )
 Route::prefix('web/api')->name('web.api.')->middleware(['web'])->group(function() {
 	
 	// Linki publiczne	
 	// Route::get('/version', [ApiController::class, 'version'])->name('version');
+	
+	// Linki publiczne bez @csrf_token
+	// Route::get('/payment', [PayController::class, 'notify'])->name('payment');
 	
 	// Linki prywatne, zalogowani użytkownicy
 	Route::middleware(['auth', 'role:admin|worker|user'])->group(function () {
@@ -222,4 +225,27 @@ Route::get('/profile', function () {
 	'auth',
 	'role:admin|worker|user'
 ]); // Zalogowany użytkownik
+```
+
+### Csrf Token
+
+#### Wyłącz ochronę csrf dla tras
+```php
+<?php
+
+namespace App\Http\Middleware;
+
+use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken as Middleware;
+
+class VerifyCsrfToken extends Middleware
+{
+	/**
+	 * The URIs that should be excluded from CSRF verification.
+	 *
+	 * @var array<int, string>
+	 */
+	protected $except = [
+		'web/api/payment/*'
+	];
+}
 ```
