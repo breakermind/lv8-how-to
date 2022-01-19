@@ -124,6 +124,28 @@ class AreaController extends Controller
 ```
 
 ### Policy
+Domyślnie wszystkie bramy i zasady automatycznie zwracają wartość false, jeśli przychodzące żądanie HTTP nie zostało zainicjowane przez uwierzytelnionego użytkownika.
+
+#### Policy tylko zalogowany właściciel może aktualizować dane (client panel)
+```php
+<?php
+
+namespace App\Policies;
+
+use App\Models\Address;
+use App\Models\User;
+
+class AddressPolicy
+{	
+	// Tylko zalogowani użytkownicy mogą aktualizować swój adres
+	public function update(User $user, Address $address)
+	{
+		return $user->id === $address->user_id;
+	}
+}
+```
+
+#### Policy pozwól na wszystko zalogowanym (admin panel)
 app/Polices/AreaPolicy.php
 ```php
 <?php
@@ -141,19 +163,19 @@ class AreaPolicy
 	// Allow only logged admin or worker
 	public function before(User $user, $ability)
 	{
-		// Authenticated roles only: admin and/or worker
+		// Authenticated roles only: admin and/or worker and/or user
 		if ($user->role == 'admin') {
 			return true;
 		}
 	}
 
-	// Allow all
+	// Allow all (guest user)
 	public function viewAny(?User $user)
 	{
 		return true;
 	}
 
-	// Allow all
+	// Allow all (guest user)
 	public function view(?User $user, Area $area)
 	{
 		return true;
