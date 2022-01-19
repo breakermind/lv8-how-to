@@ -25,7 +25,7 @@ php artisan make:model Area --migration
 ```
 
 #### Utwórz route middleware
-``sh
+```sh
 php artisan make:middleware UserRoles
 ```
 
@@ -37,6 +37,11 @@ php artisan storage:link
 #### Wyświetl listę routes aplikacji
 ```sh
 php artisan route:list
+```
+
+### Utwórz migrację modelu
+```sh
+php artisan make:migration update_user_table
 ```
 
 #### Migracja tabel do bazy danych
