@@ -50,6 +50,11 @@ php artisan route:list
 php artisan make:migration update_user_table
 ```
 
+#### Utwórz queue tabelę
+```sh
+php artisan queue:table
+```
+
 #### Migracja tabel do bazy danych
 ```sh
 # Utwórz tablki
