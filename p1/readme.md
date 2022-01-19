@@ -247,6 +247,7 @@ Route::prefix('web/api')->name('web.api.')->middleware(['web'])->group(function(
 ```
 
 #### Wyłącz ochronę csrf dla tras
+app/Http/Middleware/VerifyCsrfToken.php
 ```php
 <?php
 
