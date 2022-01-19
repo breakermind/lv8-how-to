@@ -190,7 +190,7 @@ protected $routeMiddleware = [
 Route::prefix('web/api')->name('web.api.')->middleware(['web'])->group(function() {
 	
 	// Linki publiczne	
-	// Route::get('/version', [UserController::class, 'version'])->name('version');
+	// Route::get('/version', [ApiController::class, 'version'])->name('version');
 	
 	// Linki prywatne, zalogowani użytkownicy
 	Route::middleware(['auth', 'role:admin|worker|user'])->group(function () {
