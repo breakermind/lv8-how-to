@@ -207,7 +207,7 @@ Route::prefix('web/api')->name('web.api.')->middleware(['web'])->group(function(
 	Route::middleware(['auth', 'role:admin'])->group(function () {
 		// Route::get('/test/admin', [AdminController::class, 'test'])->name('test.admin');
 	});
-}
+});
 
 // Lub pojedyńczo
 Route::get('/profile', function () {	
