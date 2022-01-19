@@ -100,8 +100,12 @@ class OrderShipmentController extends Controller
 		$order = Order::findOrFail($request->order_id);
 
 		// Order shipment logic...
-
+		
+		// Emit event
 		OrderShipped::dispatch($order);
+		
+		// Or
+        	event(new OrderShipped($order));
 	}
 }
 ```
