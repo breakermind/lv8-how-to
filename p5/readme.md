@@ -76,9 +76,9 @@ class SendShipmentNotification // implements ShouldQueue
 	}
 	
 	public function failed(OrderShipped $event, $exception)
-    {
-        //
-    }
+	{
+		//
+	}
 }
 ```
 
