@@ -142,7 +142,7 @@ use App\Models\User;
 
 class AddressPolicy
 {	
-	// Tylko zalogowani użytkownicy mogą aktualizować swój adres
+	// Tylko zalogowani użytkownicy mogą zaktualizować swój adres
 	public function update(User $user, Address $address)
 	{
 		return $user->id === $address->user_id;
