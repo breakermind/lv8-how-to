@@ -98,10 +98,10 @@ use App\Jobs\SendEmailNewsletterJob;
 
 class Kernel extends ConsoleKernel
 {  
-    protected function schedule(Schedule $schedule)
-    {
+	protected function schedule(Schedule $schedule)
+	{
 		// Send newsletter
-        $schedule->job(new SendEmailNewsletterJob())->daily();
-    }
+		$schedule->job(new SendEmailNewsletterJob())->daily();
+	}
 }
 ```
