@@ -153,7 +153,13 @@ resources/lang/{locale}.json
 ```php
 use App\Models\Trans;
 
+// Create translations .json files
 Trans::createTranslationFiles();
+```
+
+### Pobierz lub zmień język tłumaczeń
+```php
+use App\Models\Trans;
 
 // Get session lang
 Trans::loadSessionLang();
