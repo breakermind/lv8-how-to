@@ -174,7 +174,13 @@ resource/views/emails/newsletter/mail.blade.php
 </html>
 ```
 
+### Utwórz migrację
+```sh
+php artisan make:migrate  update_users_table
+```
+
 ### Migracja tabeli usera
+database/migrations/2022_01_21_1234567_update_users_table.php
 ```php
 <?php
 
