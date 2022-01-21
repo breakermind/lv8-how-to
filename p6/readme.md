@@ -92,14 +92,14 @@ class Trans extends Model
 		}
 	}
 	
-	static function loadLang()
+	static function loadSessionLang()
 	{
 		if(!empty(session('lang'))) {
 			App::setLocale(session('lang'));
 		}
 	}
 
-	static function setLang($lang = '')
+	static function setSessionLang($lang = '')
 	{
 		session(['lang' => $lang]);
 		App::setLocale($lang);
