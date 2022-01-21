@@ -1,11 +1,13 @@
 # Jobs, Queues, Schedulers
+Harmonogram zadań z zadaniami i kolejkowaniem wiadomości email.
 
-## Harmonogram
+## Schedulers
 
 ### Utwórz logi
 ```sh
 cd app
 mkdir -p storage/logs/cron.log
+mkdir -p storage/logs/queue.log
 mkdir -p storage/logs/newsletter.log
 ```
 
@@ -25,6 +27,30 @@ php artisan schedule:work
 
 php artisan schedule:list
 ```
+
+### Dodaj zadanie do harmonogramu
+app/Console/Kernel.php
+```php
+<?php
+
+namespace App\Console;
+
+use Illuminate\Console\Scheduling\Schedule;
+use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
+use Illuminate\Support\Facades\DB;
+use App\Jobs\SendEmailNewsletterJob;
+
+class Kernel extends ConsoleKernel
+{  
+	protected function schedule(Schedule $schedule)
+	{
+		// Send newsletter
+		$schedule->job(new SendEmailNewsletterJob())->daily();
+	}
+}
+```
+
+## Jobs
 
 ### Utwórz zadanie
 ```sh
@@ -84,24 +110,177 @@ class SendEmailNewsletterJob implements ShouldQueue
 }
 ```
 
-### Dodaj zadanie do harmonogramu
-app/Console/Kernel.php
+### Utwórz wiadomość email
+```sh
+php artisan make:mail NewsletterMail
+```
+
+### Edytuj wiadomość
+app/Mail/NewsletterMail.php
 ```php
 <?php
 
-namespace App\Console;
+namespace App\Mail;
 
-use Illuminate\Console\Scheduling\Schedule;
-use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
-use Illuminate\Support\Facades\DB;
-use App\Jobs\SendEmailNewsletterJob;
+use Illuminate\Bus\Queueable;
+use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Mail\Mailable;
+use Illuminate\Queue\SerializesModels;
 
-class Kernel extends ConsoleKernel
-{  
-	protected function schedule(Schedule $schedule)
+class NewsletterMail extends Mailable implements ShouldQueue
+{
+	use Queueable, SerializesModels;
+
+	public $user;
+	public $subject;
+	public $view;
+
+	public function __construct(object $user, $view = 'emails.newsletter.mail', $subject = 'Fresh newsletter', $nam = 'Newsletter')
 	{
-		// Send newsletter
-		$schedule->job(new SendEmailNewsletterJob())->daily();
+		$this->user = $user;
+		$this->from(env('MAIL_FROM_ADDRESS') ?? 'no-reply@'.request()->getHttpHost(), $name);
+		$this->subject(trans('messages.emails.newsletter.subject') ?? $subject);
+		$this->view($view);
+		
+		$this->afterCommit();
+	}
+
+	public function build()
+	{
+		return $this;
 	}
 }
+```
+
+### Szablon blade wiadomości
+resource/views/emails/newsletter/mail.blade.php
+```php
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>@lang('Fresh newsletter')</title>
+
+</head>
+<body>
+	<h1>Welcome {{ $user->name }}!</h1>
+	<p>We have got new promotion ... <a href="/promotions"> Click here </a></p>
+	<p>Regards, Thank you for subscribing!</p>
+	<p>Date: <small>{{ now() }}</small></p>
+</body>
+</html>
+```
+
+### Migracja tabeli usera
+```php
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+class UpdateUsersTable extends Migration
+{
+	/**
+	 * Run the migrations.
+	 *
+	 * @return void
+	 */
+	public function up()
+	{
+		Schema::table('users', function (Blueprint $table)
+		{
+			// $table->engine = 'InnoDB';
+			// $table->charset = 'utf8mb4';
+			// $table->collation = 'utf8mb4_unicode_ci';
+
+			if (!Schema::hasColumn('users', 'role')) {
+				$table->enum('role', ['user','worker','admin'])->nullable()->default('user');
+			}
+			if (!Schema::hasColumn('users', 'remember_token')) {
+				$table->string('remember_token')->nullable(true);
+			}
+			if (!Schema::hasColumn('users', 'email_verified_at')) {
+				$table->timestamp('email_verified_at')->nullable(true);
+			}
+			if (!Schema::hasColumn('users', 'code')) {
+				$table->string('code', 128)->unique()->nullable(true);
+			}
+			if (!Schema::hasColumn('users', 'ip')) {
+				$table->string('ip')->nullable(true);
+			}
+			if (!Schema::hasColumn('users', 'locale')) {
+				$table->string('locale', 2)->nullable()->default('pl');
+			}
+			if (!Schema::hasColumn('users', 'newsletter_on')) {
+				$table->tinyInteger('newsletter_on')->nullable()->default(1);
+			}
+			if (!Schema::hasColumn('users', 'deleted_at')) {
+				$table->softDeletes();
+			}
+		});
+	}
+
+	/**
+	 * Reverse the migrations.
+	 *
+	 * @return void
+	 */
+	public function down()
+	{
+		Schema::table('users', function (Blueprint $table) {
+			$table->dropColumn(['code', 'ip', 'role', 'remember_token', 'deleted_at']);
+		});
+	}
+}
+```
+
+### Uruchom migrację
+```sh
+php artisan migrate
+```
+
+## Queues
+
+### Utwórz tabelki w bazie danych
+```sh
+php artisan queue:table
+php artisan migrate
+```
+
+### Zainstaluj monitoring service
+```sh
+sudo apt-get install supervisor
+
+sudo supervisorctl reread
+sudo supervisorctl update
+sudo supervisorctl start laravel-worker:*
+```
+
+### Uruchom kolejkę jako service
+/etc/supervisor/conf.d/laravel-worker.conf 
+```sh
+[program:laravel-worker]
+process_name=%(program_name)s_%(process_num)02d
+command=php /home/forge/app.xx/artisan queue:work --sleep=3 --tries=3 --max-time=3600
+autostart=true
+autorestart=true
+stopasgroup=true
+killasgroup=true
+user=forge
+numprocs=8
+redirect_stderr=true
+stdout_logfile=/home/forge/app.xx/storage/logs/queue.log
+stopwaitsecs=3600
+
+# Or with Aws
+# command=php /home/forge/app.xx/artisan queue:work sqs --sleep=3 --tries=3 --max-time=3600
+```
+
+### Uruchom przetwarzanie kolejki lokalnie w terminalu (dev)
+```sh
+php artisan queue:work
 ```
