@@ -5,7 +5,7 @@
 3. <a href="https://github.com/breakermind/how/tree/main/p3"> Controller, Policy, Request Validation, Resource </a>
 4. <a href="https://github.com/breakermind/how/tree/main/p4"> Model Relations, Pivot Tables </a>
 5. <a href="https://github.com/breakermind/how/tree/main/p5"> Events, Listeners </a>
-6. <a href="https://github.com/breakermind/how/tree/main/p6"> Translations </a>
+6. <a href="https://github.com/breakermind/how/tree/main/p6"> Database Translations </a>
 7. <a href="https://github.com/breakermind/how/tree/main/p7"> Jobs, Queues, Schedulers </a>
 
 ### Php artisan
