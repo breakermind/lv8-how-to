@@ -20,11 +20,11 @@ class CreateTransTable extends Migration
     public function up()
     {
         Schema::create('trans', function (Blueprint $table) {
-            $table->id();
-			$table->longText('slug');
-            $table->longText('text');
-			$table->string('locale', 2)->nullable()->default('en');
-            $table->timestamps();
+		$table->id();
+		$table->longText('slug');
+		$table->longText('text');
+		$table->string('locale', 2)->nullable()->default('en');
+		$table->timestamps();
         });
     }
 	
