@@ -164,6 +164,16 @@ config/filesystems.php
             'root' => storage_path('app/public'),
             'url' => env('APP_URL').'/storage',
             'visibility' => 'public',
+            'permissions' => [
+                'file' => [
+                    'public' => 2775,
+                    'private' => 0600,
+                ],
+                'dir' => [
+                    'public' => 2775,
+                    'private' => 0700,
+                ],
+            ],
         ],
         
         'images' => [
