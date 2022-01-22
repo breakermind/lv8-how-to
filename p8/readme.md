@@ -17,23 +17,25 @@ Storage::disk('public')->put('public.txt', 'Public disc');
 
 // Utwórz storage/app/avatars/favicon.ico
 echo $path = Storage::putFileAs('avatars', new File(base_path().'/public/favicon.ico'), 'favicon.ico');
+// avatars/favicon.ico
 
 // Utwórz storage/app/public/avatars/favicon.ico
 echo $path = Storage::disk('public')->putFileAs('avatars', new File(base_path().'/public/favicon.ico'), 'favicon.ico');
+// avatars/favicon.ico
 
 // Upload pliku: storage/app/public/avatars/{hashed-filename}.png
-echo $path = Storage::disk('public')->putFile('avatars', $request->file('avatar'));
+echo $path = Storage::disk('public')->putFile('avatars', request()->file('avatar'));
 
 // Upload pliku: storage/app/public/avatars/image.png
-echo $path = Storage::disk('public')->putFileAs('avatars', $request->file('avatar'), 'image.png');
+echo $path = Storage::disk('public')->putFileAs('avatars', request()->file('avatar'), 'image.png');
 
-// Po dodaniu nowego dysku w config/filesystems.php
+// Po dodaniu nowego dysku 'images' w config/filesystems.php
 
-// Upload pliku: storage/app/images/avatars/{hashed-filename}.png
-echo $path = Storage::disk('images')->putFile('avatars', $request->file('avatar'));
+// Utwórz z upload storage/app/public/avatars/{hashed-filename}.png
+echo $path = Storage::disk('public')->putFile('avatars', request()->file('avatar'));
 
-// Upload pliku: storage/app/images/avatars/image.png
-echo $path = Storage::disk('images')->putFileAs('avatars', $request->file('avatar'), 'image.png');
+// Utwórz z upload storage/app/public/avatars/image.png
+echo $path = Storage::disk('public')->putFileAs('avatars', request()->file('avatar'), 'image.png');	
 ```
 
 #### Upload informacje o pliku
@@ -53,7 +55,7 @@ echo Storage::url('file.txt');
 echo asset('storage/file.txt');
 
 // Plik: /images/ico.png
-echo Storage::url('ico.png');
+echo Storage::disk('images')->url('ico.png');
 echo asset('images/ico.png');
 ```
 
