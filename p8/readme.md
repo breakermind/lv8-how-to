@@ -1,19 +1,41 @@
 # Storage, Files, Upload
 Upload plików i operacje na plikach.
 
-## Storage local
-Root directory: storage/app
+## Storage katalog główny (local)
+Directory: storage/app
+
+### Utwórz linki symboliczne
+Publiczny dostęp do plików wysyłanych na server z katalogu głównego aplikacji storage/app/public.
+```sh
+php artisan storage:link
+
+# Tworzy link
+public/storage <=> storage/app/public
+
+# Wtedy plik z
+storage/app/public/json/file.json
+
+# Wyświetlamy jako
+public/storage/json/file.json
+
+# Lub
+echo Storage::url('json/file.json');
+echo asset('json/file.json');
+```
 
 ### W skrócie
 ```php
-// Utwórz plik: storage/app/local.txt
+// Utwórz plik: storage/app/local.txt => not accessible from root app /public
 Storage::disk('local')->put('local.txt', 'Local disc');
 
-// Utwórz plik: storage/app/local.txt
+// Utwórz plik: storage/app/public/local.txt => /public/storage/public.txt
 Storage::disk('local')->put('public/local-public.txt', 'Local disc');
 
-// Utwórz plik: storage/app/public/local.txt
+// Utwórz plik: storage/app/public/public.txt => /public/storage/public.txt
 Storage::disk('public')->put('public.txt', 'Public disc');
+
+// Utwórz plik: storage/app/public/gallery/public.txt => /public/storage/gallery/public.txt
+Storage::disk('public')->put('gallery/public.txt', 'Public disc');
 
 // Utwórz storage/app/avatars/favicon.ico
 echo $path = Storage::putFileAs('avatars', new File(base_path().'/public/favicon.ico'), 'favicon.ico');
