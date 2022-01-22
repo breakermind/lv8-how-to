@@ -17,6 +17,28 @@ config/filesystems.php
     public_path('storage') => storage_path('app/public'),
     public_path('images') => storage_path('app/images'),
 ],
+
+'disks' => [
+
+        'local' => [
+            'driver' => 'local',
+            'root' => storage_path('app'),
+        ],
+
+        'public' => [
+            'driver' => 'local',
+            'root' => storage_path('app/public'),
+            'url' => env('APP_URL').'/storage',
+            'visibility' => 'public',
+        ],
+        
+        'images' => [
+            'driver' => 'local',
+            'root' => storage_path('app/images'),
+            'url' => env('APP_URL').'/storage',
+            'visibility' => 'public',
+        ],
+];
 ```
 
 #### Utwórz linki symboliczne
@@ -61,10 +83,21 @@ file_put_contents($path, $json);
 
 #### Storage dysk public tworzenie pliku
 ```php
-// Dostęp do storage/app/public
+// Katalog storage/app
 Storage::disk('local')->put('file.txt', 'Message...');
+
+// Katalog storage/app/public
+Storage::disk('public')->put('file.txt', 'Message...');
+
+// Katalog storage/app/images
+Storage::disk('images')->put('file.txt', 'Message...');
+
+// File path /storage/...
 echo Storage::url('file.txt');
 echo asset('storage/file.txt');
+
+// Storage images
+echo Storage::disk('images')->url('file.txt');
 
 Storage::->put('avatars/1', 'Message...');
 Storage::disk('s3')->put('avatars/1', 'Message...');
