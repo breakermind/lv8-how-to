@@ -7,6 +7,7 @@
 5. <a href="https://github.com/breakermind/how/tree/main/p5"> Events, Listeners </a>
 6. <a href="https://github.com/breakermind/how/tree/main/p6"> Database Translations </a>
 7. <a href="https://github.com/breakermind/how/tree/main/p7"> Jobs, Queues, Schedulers </a>
+8. <a href="https://github.com/breakermind/how/tree/main/p8"> Storage, Files </a>
 
 ### Php artisan
 
@@ -54,6 +55,7 @@ php artisan make:migration update_user_table
 #### Utwórz queue tabelę
 ```sh
 php artisan queue:table
+php artisan migrate
 
 # php artisan queue:failed-table
 ```
@@ -69,6 +71,13 @@ php artisan migrate:fresh --path=/database/migrations/123456_create_user_table.p
 php artisan --env=testing migrate
 php artisan --env=testing migrate:fresh
 php artisan --env=testing migrate:fresh --path=/database/migrations/123456_create_user_table.php --force
+```
+
+### Session w bazie danych
+config/session.php
+```sh
+php artisan session:table
+php artisan migrate
 ```
 
 #### Harmonogram pracy (cron job worker)
