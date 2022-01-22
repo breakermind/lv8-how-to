@@ -86,7 +86,7 @@ if ($request->hasFile('image'))
     $path = request()->file('image')->storeAs('gallery', uniqid().'.'.$ext, 'public');
     
     // Dodaj ścieżkę
-    request()->merge['image' => $path];
+    request()->merge(['image' => $path]);
     
     // Save in database
     Gallery::create(request->only(['image', 'title']));
