@@ -68,6 +68,36 @@ $extension_mime = $file->extension();
 $name = $file->hashName();
 ```
 
+#### Walidacja pliku
+```php
+$validated = request()->validate([    
+    'image' => 'required|image|mimes:jpeg,png,jpg,webp|max:4096',
+    'avatar' => 'sometimes|image|mimes:jpeg,png,jpg,webp|max:4096',
+    'title' => ['sometimes', 'max:255'],
+]);
+
+if ($request->hasFile('image'))
+{
+    // Save image
+    $path = request()->file('image')->store('gallery', 'public');
+       
+    // Save custom file
+    $ext = request()->file('image')->extension();
+    $path = request()->file('image')->storeAs('gallery', uniqid().'.'.$ext, 'public');
+    
+    // Dodaj ścieżkę
+    request()->merge['image' => $path];
+    
+    // Save in database
+    Gallery::create(request->only(['image', 'title']));
+    
+    // Resize image file path
+    $storage_path = storage_path('app/public/') . $path;
+    
+    // Resize image here
+}
+```
+
 #### Wyświetlanie urls
 ```php
 <?php
