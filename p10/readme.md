@@ -96,4 +96,5 @@ public function register()
 			$this->app->make('App\Email\EmailController');
 		});
     }
-}```
+}
+```
