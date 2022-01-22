@@ -10,6 +10,12 @@ Root directory: storage/app
 FILESYSTEM_DRIVER=local
 ```
 
+### Link symboliczny z /public/storage do /storage/app/public
+Publiczny dostęp do plików wysyłanych na server.
+```sh
+php artisan storage:link
+```
+
 #### Tworzenie pliku na lokalnym dysku
 ```php
 <?php
