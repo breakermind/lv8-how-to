@@ -1,9 +1,44 @@
 # Testing
 Testowanie phpunit w Laravel.
 
+### Migracje bazy danych
+```sh
+php artisan --env=testing migrate:fresh --seed
+```
+
 ### Uruchom test
 ```sh
 php artisan test --stop-on-failure
+```
+
+## Baza danych i użytkownik
+mysql -u root -p
+```sql
+CREATE DATABASE IF NOT EXISTS app_xx_testing CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+GRANT ALL PRIVILEGES ON *.* TO app_xx@127.0.0.1 IDENTIFIED BY 'toor' WITH GRANT OPTION;
+FLUSH PRIVILEGES;
+```
+
+### Ustawienia
+.env.testing
+```sh
+APP_ENV=testing
+APP_DEBUG=true
+
+DB_CONNECTION=mysql
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=app_xx_testing
+DB_USERNAME=app_xx
+DB_PASSWORD=toor
+
+BROADCAST_DRIVER=log
+CACHE_DRIVER=file
+FILESYSTEM_DRIVER=local
+QUEUE_CONNECTION=database
+SESSION_DRIVER=file
+SESSION_LIFETIME=120
+# SESSION_SECURE_COOKIE=true
 ```
 
 ### Logowanie użytkownika phpunit
