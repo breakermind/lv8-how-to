@@ -1,16 +1,60 @@
-# Storage, Files
+# Storage, Files, Upload
 Upload plików i operacje na plikach.
 
 ## Storage local
 Root directory: storage/app
 
-#### Konfiguracja
+### W skrócie
+```php
+// Utwórz plik: storage/app/local.txt
+Storage::disk('local')->put('local.txt', 'Local disc');
+
+// Utwórz plik: storage/app/local.txt
+Storage::disk('local')->put('public/local-public.txt', 'Local disc');
+
+// Utwórz plik: storage/app/public/local.txt
+Storage::disk('public')->put('public.txt', 'Public disc');
+
+// Utwórz storage/app/avatars/favicon.ico
+echo $path = Storage::putFileAs('avatars', new File(base_path().'/public/favicon.ico'), 'favicon.ico');
+
+// Utwórz storage/app/public/avatars/favicon.ico
+echo $path = Storage::disk('public')->putFileAs('avatars', new File(base_path().'/public/favicon.ico'), 'favicon.ico');
+
+// Upload pliku: storage/app/public/avatars/{hashed-filename}.png
+echo $path = Storage::disk('public')->putFile('avatars', $request->file('avatar'));
+
+// Upload pliku: storage/app/public/avatars/image.png
+echo $path = Storage::disk('public')->putFileAs('avatars', $request->file('avatar'), 'image.png');
+
+// Po dodaniu nowego dysku w config/filesystems.php
+
+// Upload pliku: storage/app/images/avatars/{hashed-filename}.png
+echo $path = Storage::disk('images')->putFile('avatars', $request->file('avatar'));
+
+// Upload pliku: storage/app/images/avatars/image.png
+echo $path = Storage::disk('images')->putFileAs('avatars', $request->file('avatar'), 'image.png');
+```
+
+#### Wyświetlanie plików
+```php
+<?php
+// Plik: /public/storage/file.txt
+echo Storage::url('file.txt');
+echo asset('storage/file.txt');
+
+// Plik: /images/ico.png
+echo Storage::url('ico.png');
+echo asset('images/ico.png');
+```
+
+### Konfiguracja
 .env lub config/filesystems.php
 ```sh
 FILESYSTEM_DRIVER=local
 ```
 
-### Utwórz linki symboliczne dla katalogów w storage/app
+#### Utwórz linki symboliczne dla katalogów w storage/app
 config/filesystems.php
 ```php
 'links' => [
