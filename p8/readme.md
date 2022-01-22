@@ -18,8 +18,7 @@ storage/app/public/json/file.json
 # Wyświetlamy jako
 public/storage/json/file.json
 
-# Lub
-echo Storage::url('json/file.json');
+# Tworzymy url do pliku
 echo asset('json/file.json');
 ```
 
@@ -69,16 +68,38 @@ $extension_mime = $file->extension();
 $name = $file->hashName();
 ```
 
-#### Wyświetlanie plików
+#### Wyświetlanie urls
 ```php
 <?php
-// Plik: /public/storage/file.txt
-echo Storage::url('file.txt');
+# Tworzymy url do pliku
 echo asset('storage/file.txt');
 
-// Plik: /images/ico.png
-echo Storage::disk('images')->url('ico.png');
+# Tworzymy url do pliku
 echo asset('images/ico.png');
+```
+
+#### Tworzenie plików tradycyjnie
+```php
+<?php
+// Json
+$data = ['fish' => 'Rybka'];
+$json = json_encode($data, JSON_PRETTY_PRINT);
+
+// Katalog główny aplikacji
+$path = base_path('resource/lang/') . 'pl.json';
+file_put_contents($path, $json);
+
+// Katalog /resource/lang/pl.json
+$path = resource_path('lang/') . 'pl.json';
+file_put_contents($path, $json);
+
+// Katalog /public/settings/pl.json
+$path = public_path('settings/') . 'pl.json';
+file_put_contents($path, $json);
+
+// Katalog /storage/app/lang/pl.json
+$path = storage_path('app/public/lang/') . 'pl.json';
+file_put_contents($path, $json);
 ```
 
 ## Konfiguracja
@@ -136,26 +157,6 @@ echo asset('storage/file.txt');
 
 // public/images/ico.png
 echo asset('images/ico.png');
-```
-
-#### Tworzenie pliku na lokalnym dysku
-```php
-<?php
-// Json
-$data = ['fish' => 'Rybka'];
-$json = json_encode($data, JSON_PRETTY_PRINT);
-
-// Katalog /resource/lang/pl.json
-$path = resource_path('lang/') . 'pl.json';
-file_put_contents($path, $json);
-
-// Katalog /public/settings/pl.json
-$path = public_path('settings/') . 'pl.json';
-file_put_contents($path, $json);
-
-// Katalog /storage/app/lang/pl.json
-$path = storage_path('app/public/lang/') . 'pl.json';
-file_put_contents($path, $json);
 ```
 
 #### Storage dysk public tworzenie pliku
