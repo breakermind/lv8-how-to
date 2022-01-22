@@ -70,9 +70,42 @@ Storage::->put('avatars/1', 'Message...');
 Storage::disk('s3')->put('avatars/1', 'Message...');
 ```
 
-#### Wysyłanie plików formularza
+#### Informacje o pliku
 ```php
+$file = $request->file('avatar');
+
+$name = $file->getClientOriginalName();
+
+$extension = $file->getClientOriginalExtension();
+
+$extension_mime = $file->extension();
+
+$name = $file->hashName();
+```
+
+#### Zapisywanie plików z formularza
+```php
+$path = $request->file('avatar')->store('avatars');
+$path = $request->file('avatar')->storeAs('avatars', $request->user()->id);
+
 $path = Storage::putFile('avatars', $request->file('avatar'));
+$path = Storage::putFileAs('avatars', $request->file('avatar'), $request->user()->id);
+
 $path = Storage::putFileAs('avatars', $request->file('avatar'), 'photo.jpg');
 $path = Storage::putFileAs('avatars', new File('/path/to/photo'), 'photo.jpg');
+```
+
+#### Zapisywanie plików na dysk s3 aws
+```php
+$path = $request->file('avatar')->store('avatars/'.$request->user()->id, 's3');
+$path = $request->file('avatar')->storeAs('avatars', $request->user()->id, 's3');
+```
+
+#### Usuwanie plikuów
+```php
+Storage::delete('file.jpg');
+
+Storage::delete(['file.jpg', 'file2.jpg']);
+
+Storage::disk('s3')->delete('path/file.jpg');
 ```
