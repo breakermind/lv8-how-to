@@ -7,7 +7,7 @@
 5. <a href="https://github.com/breakermind/how/tree/main/p5"> Events, Listeners </a>
 6. <a href="https://github.com/breakermind/how/tree/main/p6"> Database Translations </a>
 7. <a href="https://github.com/breakermind/how/tree/main/p7"> Jobs, Queues, Schedulers </a>
-8. <a href="https://github.com/breakermind/how/tree/main/p8"> Storage, Files </a>
+8. <a href="https://github.com/breakermind/how/tree/main/p8"> Storage, Files, Upload </a>
 
 ### Php artisan
 
