@@ -3,6 +3,12 @@ Upload plików i operacje na plikach.
 
 ## Storage katalog główny (local)
 Directory: storage/app
+```sh
+# Uprawnienia upload
+sudo chown -R username:www-data /home/username/www/app.xx
+sudo chown -R www-data:username /home/username/www/app.xx/storage
+sudo chmod -R 2775 /home/username/www/app.xx
+```
 
 ### Utwórz linki symboliczne
 Publiczny dostęp do plików wysyłanych na server z katalogu głównego aplikacji storage/app/public.
