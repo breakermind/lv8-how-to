@@ -89,7 +89,7 @@ if ($request->hasFile('image'))
     request()->merge(['image' => $path]);
     
     // Save in database
-    Gallery::create(request->only(['image', 'title']));
+    Gallery::create(request()->only(['image', 'title']));
     
     // Resize image file path
     $storage_path = storage_path('app/public/') . $path;
