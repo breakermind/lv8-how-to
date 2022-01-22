@@ -1,6 +1,12 @@
 # Testing
+Testowanie phpunit w Laravel.
 
-### Testowanie zalogowanego użytkownika phpunit
+### Uruchom test
+```sh
+php artisan test --stop-on-failure
+```
+
+### Logowanie użytkownika phpunit
 ```php
 <?php
 
