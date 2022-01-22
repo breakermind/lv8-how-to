@@ -36,6 +36,15 @@ echo $path = Storage::disk('images')->putFile('avatars', $request->file('avatar'
 echo $path = Storage::disk('images')->putFileAs('avatars', $request->file('avatar'), 'image.png');
 ```
 
+#### Upload informacje o pliku
+```php
+$file = $request->file('avatar');
+$name = $file->getClientOriginalName();
+$extension = $file->getClientOriginalExtension();
+$extension_mime = $file->extension();
+$name = $file->hashName();
+```
+
 #### Wyświetlanie plików
 ```php
 <?php
@@ -48,7 +57,7 @@ echo Storage::url('ico.png');
 echo asset('images/ico.png');
 ```
 
-### Konfiguracja
+## Konfiguracja
 .env lub config/filesystems.php
 ```sh
 FILESYSTEM_DRIVER=local
@@ -145,19 +154,6 @@ echo Storage::disk('images')->url('file.txt');
 
 Storage::->put('avatars/1', 'Message...');
 Storage::disk('s3')->put('avatars/1', 'Message...');
-```
-
-#### Informacje o pliku
-```php
-$file = $request->file('avatar');
-
-$name = $file->getClientOriginalName();
-
-$extension = $file->getClientOriginalExtension();
-
-$extension_mime = $file->extension();
-
-$name = $file->hashName();
 ```
 
 #### Zapisywanie plików z formularza
