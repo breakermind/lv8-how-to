@@ -113,12 +113,9 @@ php artisan vendor:publish --tag=webi-config --force
 #### Run php artisan commands with composer.json
 composer dump-autoload -o
 ```json
-// composer.json
 {
-	// ...
 	"scripts": {
 		"post-autoload-dump": [
-			// ...
 			"@php artisan storage:link --ansi"
 		],
 	}	
