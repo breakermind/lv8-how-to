@@ -25,6 +25,7 @@ git clone --branch v1.0.1 https://github.com/breakermind/lv8-how-to.git samples
 
 git clone --branch <tag-version> --depth=1 <repo-url> <app-dir>
 git clone --branch <tag-version> --single-branch <repo-url> <app-dir>
+git clone --branch v1.0.3 --single-branch https://github.com/breakermind/lv8-how-to.git samples
 ```
 
 ### Php artisan
