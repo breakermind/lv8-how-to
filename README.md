@@ -8,8 +8,24 @@
 6. <a href="https://github.com/breakermind/how/tree/main/p6"> Database Translations </a>
 7. <a href="https://github.com/breakermind/how/tree/main/p7"> Jobs, Queues, Schedulers </a>
 8. <a href="https://github.com/breakermind/how/tree/main/p8"> Storage, Files, Upload </a>
-9. <a href="https://github.com/breakermind/how/tree/main/p9"> Testing </a>
+9. <a href="https://github.com/breakermind/how/tree/main/p9"> Testing, PHPUnit </a>
 10. <a href="https://github.com/breakermind/how/tree/main/p10"> ServiceProvider, Registry Pattern </a>
+
+### Composer, git
+
+#### Utwórz project
+```sh
+composer create-project laravel/laravel app-dir
+```
+
+#### Pobierz wybrany tag/version z repozytorium
+```sh
+git clone --branch <tag-version> <repo-url> <app-dir>
+git clone --branch v1.0.1 https://github.com/breakermind/lv8-how-to.git samples
+
+git clone --branch <tag-version> --depth=1 <repo-url> <app-dir>
+git clone --branch <tag-version> --single-branch <repo-url> <app-dir>
+```
 
 ### Php artisan
 
