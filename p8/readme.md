@@ -33,6 +33,9 @@ storage/app
 
 ### W skrócie
 ```php
+use Illuminate\Http\File;
+use Illuminate\Support\Facades\Storage;
+
 // Utwórz plik: storage/app/local.txt => not accessible from root app /public
 Storage::put('local.txt', 'Local disc');
 
@@ -210,6 +213,8 @@ echo asset('images/ico.png');
 
 #### Storage dysk public tworzenie pliku
 ```php
+use Illuminate\Support\Facades\Storage;
+
 // Katalog storage/app
 Storage::disk('local')->put('file.txt', 'Message...');
 
@@ -233,6 +238,7 @@ Storage::disk('s3')->put('avatars/1', 'Message...');
 #### Zapisywanie plików z formularza
 ```php
 use Illuminate\Http\File;
+use Illuminate\Support\Facades\Storage;
 
 $path = $request->file('avatar')->store('avatars');
 $path = $request->file('avatar')->storeAs('avatars', $request->user()->id);
