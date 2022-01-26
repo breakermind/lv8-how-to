@@ -26,12 +26,15 @@ public/storage/json/file.json
 
 # Tworzymy url do pliku
 echo asset('json/file.json');
+
+# Default Storage::put() lub disk('local') wskazuje na
+storage/app
 ```
 
 ### W skrócie
 ```php
 // Utwórz plik: storage/app/local.txt => not accessible from root app /public
-Storage::disk('local')->put('local.txt', 'Local disc');
+Storage::put('local.txt', 'Local disc');
 
 // Utwórz plik: storage/app/public/local.txt => /public/storage/public.txt
 Storage::disk('local')->put('public/local-public.txt', 'Local disc');
@@ -229,6 +232,8 @@ Storage::disk('s3')->put('avatars/1', 'Message...');
 
 #### Zapisywanie plików z formularza
 ```php
+use Illuminate\Http\File;
+
 $path = $request->file('avatar')->store('avatars');
 $path = $request->file('avatar')->storeAs('avatars', $request->user()->id);
 
