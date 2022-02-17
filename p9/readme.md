@@ -85,3 +85,152 @@ abstract class AuthenticatedTestCase extends TestCase
 	}
 }
 ```
+
+### Testowanie wysyłania zdjęcia
+```php
+<?php
+
+namespace Tests\Feature\Auth;
+
+use Tests\Feature\Auth\AuthenticatedTestCase;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Foundation\Testing\WithoutMiddleware;
+use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Storage;
+use App\Models\User;
+
+class UpdateUserTest extends AuthenticatedTestCase
+{
+	use RefreshDatabase;
+
+	/** @test */
+	function upload_only_avatar()
+	{	
+		Storage::fake('public');
+
+		$this->assertNotEmpty($this->user->id);
+
+		$res = $this->json(
+			'POST', '/web/api/update', [
+				'name' => 'Johny Bravo',
+				'avatar' => UploadedFile::fake()->image('photo.jpg', 512, 512)->size(1024)
+			]
+		);
+
+		$res->assertStatus(200)->assertJson([
+			'message' => 'A profil has been updated.'
+		]);
+
+		$path = 'avatars/' . $this->user->id . '.jpg';
+
+		Storage::disk('public')->assertExists($path);
+		
+		$res->json($path);
+		$res->assertOk();
+
+		$this->assertDatabaseHas('users', [
+			'id' => $this->user->id,
+			'avatar' => $path
+		]);
+	}
+}
+```
+
+### Upload kontroler
+```php
+function update(UpdateRequest $r)
+{
+	$valid = $r->validated();
+
+	if(Auth::check()) {
+		try {
+			$user = Auth::user();
+
+			$allowed = ['jpg', 'jpeg', 'png', 'webp', 'gif', 'bmp'];
+
+			if($r->hasFile('avatar')) {
+				foreach ($allowed as $ext) {
+					$f = 'avatars/' . $user->id . '.' . $ext;
+					if (Storage::disk($this->disk)->exists($f)) {
+						Storage::disk($this->disk)->delete($f);
+					}
+				}
+
+				$path = Storage::disk($this->disk)->putFileAs(
+					'avatars', $r->file('avatar'), $user->id . '.' . $r->file('avatar')->extension()
+				);
+
+				if (Storage::disk($this->disk)->exists($path)) {
+					$valid['avatar'] = $path;
+				} else {
+					unset($valid['avatar']);
+				}
+			}
+
+			User::where(['id' => $user->id])->update($valid);
+		} catch (Exception $e) {
+			report($e);
+			throw new Exception(trans("Update error."), 422);
+		}
+	}	
+
+	return response()->json(['message' => trans('A profil has been updated.')]);
+}
+```
+
+### Walidacja zdjęcia
+```php
+<?php
+
+namespace App\Http\Requests\Auth;
+
+use Illuminate\Contracts\Validation\Validator;
+use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
+
+class UpdateRequest extends FormRequest
+{
+	protected $stopOnFirstFailure = true;
+
+	public function authorize()
+	{
+		if(!empty(session('locale'))){
+			app()->setLocale(session('locale'));
+		}
+
+		return true; // Allow all
+	}
+
+	public function rules()
+	{
+		$email = 'email:rfc,dns';
+		if(config('app.debug') == true) {
+			$email = 'email';
+		}
+
+		return [
+			'name' => 'required|max:50',
+			'locale' => 'sometimes|size:2',
+			'newsletter_on' => 'sometimes|boolean',
+			'bio' => 'sometimes|max:250',
+			'mobile' => 'sometimes|max:50',
+			'avatar' => 'sometimes|image|mimes:jpg,png,jpeg,webp|max:2048|dimensions:min_width=1,min_height=1,max_width=1920,max_height=1080',
+		];
+	}
+
+	public function failedValidation(Validator $validator)
+	{
+		throw new \Exception($validator->errors()->first(), 422);
+	}
+
+	function prepareForValidation()
+	{
+		$this->merge(
+			collect(request()->json()->all())->only([
+				'name', 'bio', 'locale', 'mobile', 'avatar', 'newsletter_on'
+			])->toArray()
+		);
+	}
+}
+```
