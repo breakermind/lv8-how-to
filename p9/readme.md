@@ -114,7 +114,8 @@ class UpdateUserTest extends AuthenticatedTestCase
 		$res = $this->json(
 			'POST', '/web/api/update', [
 				'name' => 'Johny Bravo',
-				'avatar' => UploadedFile::fake()->image('photo.jpg', 512, 512)->size(1024)
+				'avatar' => UploadedFile::fake()->image('photo.jpg', 512, 512)->size(1024), // Kb
+				// 'pdf' => UploadedFile::fake()->create('document.pdf', 1024), // Kb
 			]
 		);
 
@@ -139,43 +140,55 @@ class UpdateUserTest extends AuthenticatedTestCase
 
 ### Upload kontroler
 ```php
-function update(UpdateRequest $r)
-{
-	$valid = $r->validated();
+<?php
+namespace App\Http\Controllers\Auth;
 
-	if(Auth::check()) {
-		try {
-			$user = Auth::user();
+use App\Http\Controllers\Controller;
+use App\Http\Requests\Auth\UpdateRequest;
+use Illuminate\Support\Facades\Storage;
 
-			$allowed = ['jpg', 'jpeg', 'png', 'webp', 'gif', 'bmp'];
+class UploadController extends Controller {
 
-			if($r->hasFile('avatar')) {
-				foreach ($allowed as $ext) {
-					$f = 'avatars/' . $user->id . '.' . $ext;
-					if (Storage::disk($this->disk)->exists($f)) {
-						Storage::disk($this->disk)->delete($f);
+	protected $disk = 'public';
+
+	function update(UpdateRequest $r)
+	{
+		$valid = $r->validated();
+
+		if(Auth::check()) {
+			try {
+				$user = Auth::user();
+
+				$allowed = ['jpg', 'jpeg', 'png', 'webp', 'gif', 'bmp'];
+
+				if($r->hasFile('avatar')) {
+					foreach ($allowed as $ext) {
+						$f = 'avatars/' . $user->id . '.' . $ext;
+						if (Storage::disk($this->disk)->exists($f)) {
+							Storage::disk($this->disk)->delete($f);
+						}
+					}
+
+					$path = Storage::disk($this->disk)->putFileAs(
+						'avatars', $r->file('avatar'), $user->id . '.' . $r->file('avatar')->extension()
+					);
+
+					if (Storage::disk($this->disk)->exists($path)) {
+						$valid['avatar'] = $path;
+					} else {
+						unset($valid['avatar']);
 					}
 				}
 
-				$path = Storage::disk($this->disk)->putFileAs(
-					'avatars', $r->file('avatar'), $user->id . '.' . $r->file('avatar')->extension()
-				);
-
-				if (Storage::disk($this->disk)->exists($path)) {
-					$valid['avatar'] = $path;
-				} else {
-					unset($valid['avatar']);
-				}
+				User::where(['id' => $user->id])->update($valid);
+			} catch (Exception $e) {
+				report($e);
+				throw new Exception(trans("Update error."), 422);
 			}
+		}	
 
-			User::where(['id' => $user->id])->update($valid);
-		} catch (Exception $e) {
-			report($e);
-			throw new Exception(trans("Update error."), 422);
-		}
-	}	
-
-	return response()->json(['message' => trans('A profil has been updated.')]);
+		return response()->json(['message' => trans('A profil has been updated.')]);
+	}
 }
 ```
 
@@ -233,4 +246,22 @@ class UpdateRequest extends FormRequest
 		);
 	}
 }
+```
+
+### Upload kilku zdjęć
+```php
+// Input field files[] array 
+<form enctype="multipart/form-data" method="POST" action=""> 
+    <input type='file' name='files[]' multiple />
+    <button type='submit'>Upload</button>
+</form>
+
+<?php
+
+$all = collect(request()->file('files'));
+$all->each(fn ($img) {
+	if($img->extension() == 'webp') {
+		$img->move(public_path('images'), uniqid() . '.' . $img->extension());
+	}
+});
 ```
