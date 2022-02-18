@@ -1,4 +1,4 @@
-# Testing, Upload image, Resize Image
+# Testing, Upload Image, Resize Image
 Testowanie phpunit w Laravel.
 
 ### Migracje bazy danych
