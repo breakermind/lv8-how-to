@@ -1,4 +1,5 @@
-# Jak to działa w Laravel
+# Jak to działa w Laravel przykłady
+Podstawy programowania w Laravel.
 
 0. <a href="https://github.com/breakermind/how/tree/main/p0"> Configuration, database, .env </a>
 1. <a href="https://github.com/breakermind/how/tree/main/p1"> Exceptions Handler, Middleware Roles, CSRF Token </a>
@@ -9,7 +10,7 @@
 6. <a href="https://github.com/breakermind/how/tree/main/p6"> Database Translations </a>
 7. <a href="https://github.com/breakermind/how/tree/main/p7"> Jobs, Queues, Schedulers </a>
 8. <a href="https://github.com/breakermind/how/tree/main/p8"> Storage, Files, Upload </a>
-9. <a href="https://github.com/breakermind/how/tree/main/p9"> Testing, PHPUnit, Image Upload, Image Resize </a>
+9. <a href="https://github.com/breakermind/how/tree/main/p9"> Testing, PHPUnit, Email Message, Image Upload and resize </a>
 10. <a href="https://github.com/breakermind/how/tree/main/p10"> ServiceProvider, Registry Pattern </a>
 
 ### Composer, git
