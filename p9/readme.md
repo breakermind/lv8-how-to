@@ -1,4 +1,4 @@
-# Testing
+# Testing, Upload image, Resize Image
 Testowanie phpunit w Laravel.
 
 ### Migracje bazy danych
@@ -127,7 +127,7 @@ class UpdateUserTest extends AuthenticatedTestCase
 
 		Storage::disk('public')->assertExists($path);
 		
-		$res->json($path);
+		$res = $this->get(Storage::url($path));
 		$res->assertOk();
 
 		$this->assertDatabaseHas('users', [
