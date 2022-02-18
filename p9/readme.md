@@ -49,7 +49,7 @@ namespace Tests\Feature\Auth;
 
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Database\Seeders\WebiSeeder;
+use Database\Seeders\AuthSeeder;
 use App\Models\User;
 
 abstract class AuthenticatedTestCase extends TestCase
