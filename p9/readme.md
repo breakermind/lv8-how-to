@@ -139,6 +139,7 @@ class UpdateUserTest extends AuthenticatedTestCase
 ```
 
 ### Upload kontroler
+Zmiana rozmiaru plików: https://image.intervention.io/v2/introduction/installation
 ```php
 <?php
 namespace App\Http\Controllers\Auth;
@@ -146,10 +147,14 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\UpdateRequest;
 use Illuminate\Support\Facades\Storage;
+// Resize
+// use Intervention\Image\ImageManagerStatic as Image;
 
 class UploadController extends Controller {
 
 	protected $disk = 'public';
+	protected $width = 256;
+	protected $height = 256;
 
 	function update(UpdateRequest $r)
 	{
@@ -175,6 +180,9 @@ class UploadController extends Controller {
 
 					if (Storage::disk($this->disk)->exists($path)) {
 						$valid['avatar'] = $path;
+						
+						// Resize
+						// Image::make(Storage::path($path))->resize($this->width, $this->height)->save();
 					} else {
 						unset($valid['avatar']);
 					}
