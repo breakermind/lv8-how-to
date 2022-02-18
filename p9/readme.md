@@ -1,4 +1,4 @@
-# Testing, Upload Image, Resize Image
+# Testing, Upload Image, Resize Image, Email Message
 Testowanie phpunit w Laravel.
 
 ### Migracje bazy danych
@@ -272,4 +272,44 @@ $all->each(fn ($img) {
 		$img->move(public_path('images'), uniqid() . '.' . $img->extension());
 	}
 });
+```
+
+### Testowanie wysyłania wiadomości email
+```php
+<?php
+
+/** @test */
+function http_create_user()
+{
+	$pass = 'password123';
+
+	$user = User::factory()->make();
+
+	Event::fake([MessageSent::class]);
+
+	$res = $this->postJson('/web/api/register', [
+		'name' => $user->name,
+		'email' => $user->email,
+		'password' => $pass,
+		'password_confirmation' => $pass,
+	]);
+
+	$res->assertStatus(201)->assertJson(['created' => true]);
+
+	$this->assertDatabaseHas('users', [
+		'name' => $user->name,
+		'email' => $user->email,
+	]);
+
+	$db_user = User::where('email', $user->email)->first();
+
+	$this->assertTrue(Hash::check($pass, $db_user->password));
+
+	Event::assertDispatched(MessageSent::class, function ($e) {
+		$html = $e->message->getHtmlBody();
+		$this->assertStringContainsString("/activate", $html);
+		$this->assertMatchesRegularExpression('/activate\/[0-9]+\/[a-z0-9]+\?locale\=[a-z]{2}"/i', $html);
+		return true;
+	});
+}
 ```
