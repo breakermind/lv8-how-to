@@ -1,5 +1,47 @@
 # UUID jako klucz główny zamiast auto-increment w Laravelu (oneToOne, oneToMany)
 
+## Uuid Trait
+App\Helpers\Traits\Uuids.php
+```php
+<?php
+namespace App\Helpers\Traits;
+
+use Illuminate\Support\Str;
+
+/**
+ * Change id in model class
+ *
+ * protected $primaryKey = 'uid';
+ */
+trait Uuids
+{
+	protected static function boot()
+	{
+		parent::boot();
+
+		static::creating(function ($model) {
+			try {
+				// if (empty($model->{$model->getKeyName()})) {
+					$model->{$model->getKeyName()} = (string) Str::uuid();
+				// }
+			} catch (\Exception $e) {
+				abort(500, $e->getMessage());
+			}
+		});
+	}
+
+	public function getIncrementing(): bool
+	{
+		return false;
+	}
+
+	public function getKeyType(): string
+	{
+		return 'string';
+	}
+}
+```
+
 ## Models
 
 ### Post
@@ -12,33 +54,17 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
+use App\Helpers\Traits\Uuids;
 use App\Models\Detail;
 use App\Models\Comment;
 
 class Post extends Model
 {
-	use HasFactory;
+	use HasFactory, Uuids;
 
 	protected $primaryKey = 'uid';
 
-	protected $keyType = 'string';
-
-	public $incrementing = false;
-
-	protected $guarded = [];
-
-	protected static function boot()
-	{
-		parent::boot();
-
-		static::creating(function ($model) {
-			try {
-				$model->{$model->getKeyName()} = (string) Str::uuid();
-			} catch (\Exception $e) {
-				abort(500, $e->getMessage());
-			}
-		});
-	}
+	protected $guarded = [];	
 
 	public function details()
 	{
@@ -259,42 +285,4 @@ Route::get('/post', function () {
 	}])->find($p->uid);
 
 });
-```
-
-# Traits
-
-### Uuid
-App\Models\Traits\Uuid.php
-```php
-<?php
-
-namespace App\Models\Traits;
-
-use Illuminate\Support\Str;
-
-trait Uuid
-{
-	protected $primaryKey = 'id';
-
-	protected $keyType = 'string';
-
-	public $incrementing = false;
-
-	protected $guarded = [];
-
-	protected static function boot()
-	{
-		parent::boot();
-
-		static::creating(function ($model) {
-			try {
-				if (empty($model->{$model->getKeyName()})) {
-					$model->{$model->getKeyName()} = (string) Str::uuid();
-				}
-			} catch (\Exception $e) {
-				abort(500, $e->getMessage());
-			}
-		});
-	}
-}
 ```
