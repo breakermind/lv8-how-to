@@ -1,4 +1,5 @@
-# UUID jako klucz główny zamiast auto-increment w Laravelu (oneToOne, oneToMany)
+# UUID id w Laravel
+Uuid id jako klucz główny zamiast auto-increment w Laravelu (oneToOne, oneToMany).
 
 ## Uuid Trait
 App\Helpers\Traits\Uuids.php
@@ -128,7 +129,7 @@ class Comment extends Model
 
 ## Migrations
 
-### Post
+### Posts
 ```php
 <?php
 
