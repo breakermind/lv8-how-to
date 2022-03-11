@@ -21,9 +21,9 @@ trait Uuids
 
 		static::creating(function ($model) {
 			try {
-				// if (empty($model->{$model->getKeyName()})) {
+				if (empty($model->{$model->getKeyName()})) {
 					$model->{$model->getKeyName()} = (string) Str::uuid();
-				// }
+				}
 			} catch (\Exception $e) {
 				abort(500, $e->getMessage());
 			}
