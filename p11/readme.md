@@ -289,9 +289,10 @@ trait Uuid
 
 		static::creating(function ($model) {
 			try {
-				// Change id with your primary key
-				$model->id = (string) Str::uuid();
-			} catch (UnsatisfiedDependencyException $e) {
+				if (empty($model->{$model->getKeyName()})) {
+					$model->{$model->getKeyName()} = (string) Str::uuid();
+				}
+			} catch (\Exception $e) {
 				abort(500, $e->getMessage());
 			}
 		});
