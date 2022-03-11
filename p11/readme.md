@@ -33,8 +33,7 @@ class Post extends Model
 
 		static::creating(function ($model) {
 			try {
-				// Change (id) with your primary key
-				$model->uid = (string) Str::uuid();
+				$model->{$model->getKeyName()} = (string) Str::uuid();
 			} catch (\Exception $e) {
 				abort(500, $e->getMessage());
 			}
