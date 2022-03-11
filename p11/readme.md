@@ -25,6 +25,14 @@ trait Uuids
 				$model->{$model->getKeyName()} = (string) Str::uuid();
 			}
 		});
+		
+		// Or
+		// static::creating(function (Model $model) {
+		// 	$model->setKeyName('uid');
+		// 	$model->setKeyType('string');
+		// 	$model->setIncrementing(false);
+		// 	$model->setAttribute($model->getKeyName(), Str::uuid());
+		// });
 	}
 
 	public function getIncrementing(): bool
