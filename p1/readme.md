@@ -12,6 +12,8 @@ namespace App\Exceptions;
 
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Throwable;
+use Illuminate\Auth\AuthenticationException;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class Handler extends ExceptionHandler
 {	
@@ -45,6 +47,14 @@ class Handler extends ExceptionHandler
 				// Get exception
 				$msg = empty($e->getMessage()) ? 'Not Found' : $e->getMessage();
 				$code = empty($e->getCode()) ? 404 : $e->getCode();
+				
+				if($e instanceof AuthenticationException) {
+					$code = 401;
+				}
+
+				if($e instanceof NotFoundHttpException) {
+					$msg = 'Object does not exists.';
+				}
 				
 				// Json response
 				return response()->json([
