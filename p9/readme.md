@@ -127,6 +127,12 @@ class UpdateUserTest extends AuthenticatedTestCase
 
 		Storage::disk('public')->assertExists($path);
 		
+		/*
+		    Or if in .env file:
+		    FILESYSTEM_DISK=public
+		*/		
+		// Storage::assertExists($path);
+		
 		$res = $this->get(Storage::url($path));
 		$res->assertOk();
 
