@@ -1,4 +1,4 @@
-# Testing, Upload Image, Resize Image, Email Message
+# Testing, Upload Image, Resize Image, Email Message, Api Resources
 Testowanie phpunit w Laravel.
 
 ### Migracje bazy danych
@@ -9,6 +9,21 @@ php artisan --env=testing migrate:fresh --seed
 ### Uruchom test
 ```sh
 php artisan test --stop-on-failure
+```
+
+### Dodaj testsuit
+phpunit.xml
+```
+<testsuites>
+	<testsuite name="Restaurant">
+		<directory suffix="Test.php">./tests/Feature/Panel/Restaurant</directory>
+	</testsuite>
+</testsuites>
+```
+
+### Uruchom
+```sh
+php artisan test --testsuite=Restaurant --stop-on-failure
 ```
 
 ## Baza danych i użytkownik
@@ -319,3 +334,234 @@ function http_create_user()
 	});
 }
 ```
+
+## Api Resource with roles
+```php
+<?php
+
+namespace Tests\Feature\Panel\Restaurant;
+
+use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Foundation\Testing\WithFaker;
+use Illuminate\Foundation\Testing\WithoutMiddleware;
+use Tests\TestCase;
+use App\Models\User;
+use App\Models\Restaurant;
+
+class RestaurantTest extends TestCase
+{
+	use RefreshDatabase, WithFaker;
+
+	/** @test */
+	public function list()
+	{
+		Restaurant::factory()->count(5)->create();
+
+		$res = $this->get('/web/api/restaurants?perpage=2');
+
+		$res->assertStatus(200)->assertJson([
+			'restaurants' => [
+				'first_page_url' => 'http://localhost/web/api/restaurants?perpage=2&page=1',
+				'next_page_url' => 'http://localhost/web/api/restaurants?perpage=2&page=2',
+				'per_page' => '2',
+			]
+		]);
+
+		// $name = $this->faker->firstName();
+	}
+
+	/** @test */
+	public function show()
+	{
+		$o = Restaurant::factory()->create();
+
+		$res = $this->get('/web/api/restaurants/' . $o->id);
+
+		$res->assertStatus(200)->assertJson([
+			'restaurant' => [
+				'id' => $o->id,
+				'name' => $o->name,
+				'notify_sms' => $o->notify_sms,
+			],
+		]);
+
+		// $name = $this->faker->firstName();
+	}
+
+	/** @test */
+	public function user_create_disallow()
+	{
+		$user = User::factory()->role('user')->create();
+
+		$this->actingAs($user, 'web');
+
+		$r = Restaurant::factory()->make();
+
+		$res = $this->postJson('/web/api/restaurants', (array) $r);
+
+		$res->assertStatus(401)->assertJson([
+			'message' => 'Unauthorized.'
+		]);
+	}
+
+	/** @test */
+	public function worker_create_disallow()
+	{
+		$user = User::factory()->role('worker')->create();
+
+		$this->actingAs($user, 'web');
+
+		$r = Restaurant::factory()->make();
+
+		$res = $this->postJson('/web/api/restaurants', (array) $r);
+
+		$res->assertStatus(401)->assertJson([
+			'message' => 'Unauthorized.'
+		]);
+	}
+
+	/** @test */
+	public function admin_create_allow()
+	{
+		$user = User::factory()->role('admin')->create();
+
+		$this->actingAs($user, 'web');
+
+		$r = Restaurant::factory()->make();
+
+		// Create
+		$res = $this->postJson('/web/api/restaurants', $r->toArray());
+
+		$res->assertStatus(201)->assertJson([
+			'message' => 'The restaurant has been created.'
+		]);
+
+		// Exists
+		$this->assertDatabaseHas('restaurants', $r->toArray());
+	}
+
+	/** @test */
+	public function user_update_disallow()
+	{
+		$user = User::factory()->role('user')->create();
+
+		$this->actingAs($user, 'web');
+
+		// Create
+		$old = Restaurant::factory()->create();
+
+		// New
+		$r = Restaurant::factory()->make();
+
+		// Update
+		$res = $this->putJson('/web/api/restaurants/' . $old->id, $r->toArray());
+
+		$res->assertStatus(401)->assertJson([
+			'message' => 'Unauthorized.'
+		]);
+	}
+
+	/** @test */
+	public function worker_update_disallow()
+	{
+		$user = User::factory()->role('worker')->create();
+
+		$this->actingAs($user, 'web');
+
+		// Create
+		$old = Restaurant::factory()->create();
+
+		// New
+		$r = Restaurant::factory()->make();
+
+		// Update
+		$res = $this->putJson('/web/api/restaurants/' . $old->id, $r->toArray());
+
+		$res->assertStatus(401)->assertJson([
+			'message' => 'Unauthorized.'
+		]);
+	}
+
+	/** @test */
+	public function admin_update_allow()
+	{
+		$user = User::factory()->role('admin')->create();
+
+		$this->actingAs($user, 'web');
+
+		// Create
+		$old = Restaurant::factory()->create();
+
+		// New
+		$r = Restaurant::factory()->make();
+
+		// Update
+		$res = $this->putJson('/web/api/restaurants/' . $old->id, $r->toArray());
+
+		$res->assertStatus(201)->assertJson([
+			'message' => 'The restaurant has been updated.'
+		]);
+
+		// Exists
+		$this->assertDatabaseHas('restaurants', $r->toArray());
+	}
+
+	/** @test */
+	public function user_delete_disallow()
+	{
+		$user = User::factory()->role('user')->create();
+
+		$this->actingAs($user, 'web');
+
+		// Create
+		$r = Restaurant::factory()->create();
+
+		// Update
+		$res = $this->delete('/web/api/restaurants/' . $r->id);
+
+		$res->assertStatus(401)->assertJson([
+			'message' => 'Unauthorized.'
+		]);
+	}
+
+	/** @test */
+	public function worker_delete_disallow()
+	{
+		$user = User::factory()->role('worker')->create();
+
+		$this->actingAs($user, 'web');
+
+		// Create
+		$r = Restaurant::factory()->create();
+
+		// Update
+		$res = $this->delete('/web/api/restaurants/' . $r->id);
+
+		$res->assertStatus(401)->assertJson([
+			'message' => 'Unauthorized.'
+		]);
+	}
+
+	/** @test */
+	public function admin_delete_allow()
+	{
+		$user = User::factory()->role('admin')->create();
+
+		$this->actingAs($user, 'web');
+
+		// Create
+		$r = Restaurant::factory()->create();
+
+		// Update
+		$res = $this->delete('/web/api/restaurants/' . $r->id);
+
+		$res->assertStatus(201)->assertJson([
+			'message' => 'The restaurant has been deleted.'
+		]);
+
+		// Dont exists
+		$this->assertSoftDeleted('restaurants', $r->toArray());
+	}
+}
+```
+
