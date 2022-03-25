@@ -567,3 +567,53 @@ class RestaurantTest extends TestCase
 }
 ```
 
+### User Factory
+```php
+<?php
+
+namespace Database\Factories;
+
+use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Str;
+
+class UserFactory extends Factory
+{
+	public function definition()
+	{
+		$email = $this->faker->unique()->safeEmail();
+
+		return [
+			'username' => 'user_' . uniqid(),
+			'email' => uniqid().'@'.request()->getHttpHost(),
+			'name' => $this->faker->name(),
+			'mobile' => $this->faker->numerify('+48#########'),
+			'role' => 'user',
+			'bio' => $this->faker->sentence(),
+			'email_verified_at' => now(),
+			'password' => Hash::make('password123'),
+			'remember_token' => Str::random(10),
+			'code' => Str::random(10),
+			'ip' => '127.0.0.127',
+		];
+	}
+
+	public function unverified()
+	{
+		return $this->state(function (array $attributes) {
+			return [
+				'email_verified_at' => null,
+			];
+		});
+	}
+
+	public function role($role = 'user')
+	{
+		return $this->state(function (array $attributes) use ($role) {
+			return [
+				'role' => $role,
+			];
+		});
+	}
+}
+```
