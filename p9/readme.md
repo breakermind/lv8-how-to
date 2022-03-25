@@ -11,21 +11,6 @@ php artisan --env=testing migrate:fresh --seed
 php artisan test --stop-on-failure
 ```
 
-### Dodaj testsuit
-phpunit.xml
-```
-<testsuites>
-	<testsuite name="Restaurant">
-		<directory suffix="Test.php">./tests/Feature/Panel/Restaurant</directory>
-	</testsuite>
-</testsuites>
-```
-
-### Uruchom
-```sh
-php artisan test --testsuite=Restaurant --stop-on-failure
-```
-
 ## Baza danych i użytkownik
 mysql -u root -p
 ```sql
@@ -335,7 +320,24 @@ function http_create_user()
 }
 ```
 
-## Api Resource with roles
+## Api Resource z rolami użytkownika
+
+### Dodaj testsuit
+phpunit.xml
+```
+<testsuites>
+	<testsuite name="Restaurant">
+		<directory suffix="Test.php">./tests/Feature/Panel/Restaurant</directory>
+	</testsuite>
+</testsuites>
+```
+
+### Uruchom
+```sh
+php artisan test --testsuite=Restaurant --stop-on-failure
+```
+
+### Route Resource test
 ```php
 <?php
 
