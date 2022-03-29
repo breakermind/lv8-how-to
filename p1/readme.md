@@ -170,12 +170,11 @@ class AuthenticateRoles
 		if (! empty($roles)) {
 			if (Auth::check()) {
 				$user = Auth::user();
-
-				if (! in_array($user->role, $roles)) {
-					throw new Exception("Unauthorized Role", 401);
+				if (!in_array($user->role, $roles)) {
+					throw new Exception("Unauthorized.", 401);
 				}
 			} else {
-				throw new Exception("Unauthorized User", 401);
+				throw new Exception("Unauthenticated.", 401);
 			}
 		}
 
