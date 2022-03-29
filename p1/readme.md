@@ -53,7 +53,7 @@ class Handler extends ExceptionHandler
 				}
 
 				if($e instanceof NotFoundHttpException) {
-					$msg = 'Object does not exists.';
+					$msg = 'Not Found';
 				}
 				
 				// Json response
@@ -171,10 +171,10 @@ class AuthenticateRoles
 			if (Auth::check()) {
 				$user = Auth::user();
 				if (!in_array($user->role, $roles)) {
-					throw new Exception("Unauthorized.", 401);
+					throw new Exception("Unauthorized", 401);
 				}
 			} else {
-				throw new Exception("Unauthenticated.", 401);
+				throw new Exception("Unauthenticated", 401);
 			}
 		}
 
