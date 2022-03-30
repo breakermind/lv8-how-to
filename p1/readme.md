@@ -265,6 +265,18 @@ class VerifyCsrfToken extends Middleware
 }
 ```
 
+### Wyłącz csrf dla konkretnego url
+```php
+</php
+use Illuminate\Support\Facades\Route;
+use App\Http\Middleware\VerifyCsrfToken;
+use App\Http\Controllers\PayController;
+
+Route::post('/payment/{gateway}', [PayController::class, 'notify'])
+	->withoutMiddleware([VerifyCsrfToken::class])
+	->name('pay.notify');		
+```
+
 
 #### Csrf token w javascript
 ```blade
