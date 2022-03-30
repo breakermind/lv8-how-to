@@ -265,7 +265,7 @@ class VerifyCsrfToken extends Middleware
 }
 ```
 
-### Wyłącz csrf dla konkretnego url
+### Wyłącz csrf dla route
 ```php
 </php
 use Illuminate\Support\Facades\Route;
