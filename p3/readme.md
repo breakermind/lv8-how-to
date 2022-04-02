@@ -267,6 +267,10 @@ class StoreAreaRequest extends FormRequest
 			// 'price' => 'required|numeric|gte:0|regex:/^-?[0-9]+(?:.[0-9]{1,2})?$/',
 			// 'lng' => 'required|numeric|gte:0|regex:/^-?[0-9]+(?:.[0-9]{1,10})?$/',
 			// 'lat' => 'required|numeric|gte:0|regex:/^-?[0-9]+(?:.[0-9]{1,10})?$/',
+			// 'company_name' => 'sometimes',
+			// 'company_nip' => ['required_if:company_name'],
+			// 'company_city' => ['required_if:company_name'],
+			// 'company_address' => ['required_if:company_name'],
 		];
 	}
 
