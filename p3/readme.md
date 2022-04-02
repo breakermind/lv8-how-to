@@ -254,9 +254,19 @@ class StoreAreaRequest extends FormRequest
 			'visible' => 'sometimes|boolean',
 			
 			// 'date_of_birth' => 'required|date_format:Y-m-d',
+			// 'hidden_at' => 'required|date_format:Y-m-d H:i:s',
+			// 'delivery_method' => ['required', Rule::in(['home', 'pickup', 'restaurant'])],
+			// 'delivery_hour' => 'sometimes|date_format:H:i|after:1 hours',
+			// 'payment_method' => ['required', Rule::in(['money', 'card', 'online'])],
+			// 'payment_gateway' => ['required_if:payment_method,==,online', Rule::in(['payu'])],
+			// 'payment_gateway' => ['required_if:payment_method,online', Rule::in(['payu'])],
 			// 'school_id' => 'required|exists:schools,id',
 			// 'file' => 'image|mimes:jpg,jpeg,png',
+			// 'image' => 'required|image|mimes:jpg,png,jpeg,webp|max:2048|dimensions:min_width=100,min_height=100', // 2048Kb
                		// 'contact_no' => 'regex:/^[-0-9\+]+$/',
+			// 'price' => 'required|numeric|gte:0|regex:/^-?[0-9]+(?:.[0-9]{1,2})?$/',
+			// 'lng' => 'required|numeric|gte:0|regex:/^-?[0-9]+(?:.[0-9]{1,10})?$/',
+			// 'lat' => 'required|numeric|gte:0|regex:/^-?[0-9]+(?:.[0-9]{1,10})?$/',
 		];
 	}
 
