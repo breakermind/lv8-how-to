@@ -1,4 +1,4 @@
-# Exceptions Handler, Middleware Roles, CSRF Token
+# Exceptions Handler, Middleware Roles, CSRF Token, Remember me token
 Przechwytywanie i logowanie błędów w aplikacji.
 
 ### Exceptions Handler
@@ -290,3 +290,56 @@ Route::post('/payment/{gateway}', [PayController::class, 'notify'])
 	</script>
 </head>
 ```
+
+### Zapamietaj mnie podaczas logowania (remember me token)
+
+#### Ustaw ciasteczko ***_remember_token***
+```php
+// $name, $val, $minutes, $path, $domain, $secure, $httpOnly
+Cookie::queue(
+	'_remember_token',
+	$user->remember_token,
+	env('APP_REMEBER_ME_MINUTES', 900800700),
+	'/',
+	'.'.request()->getHost(),
+	request()->secure(),
+	true
+);
+```
+
+#### Zaloguj z ***_remember_token***
+```php
+<?php
+if(!Auth::check()) {
+	$t = request()->cookie('_remeber_token');
+
+	if(!empty($t)) {
+		$user = User::where(['remember_token' => $t])->whereNotNull('email_verified_at')->first();
+		
+		if($user != null) {
+			request()->session()->regenerate();
+
+			Auth::login($user, true);
+			
+			/*			
+			if(Auth::check()) {
+				// Dispatch event (optional)
+				// LoggedWithRememberMe::dispatch(Auth::user());
+			}
+			*/
+		}
+	}
+}
+```
+
+#### Odśwież sesję
+```php
+request()->session()->regenerateToken();
+
+session(['webi_cnt' => session('webi_cnt') + 1]);
+
+return response([
+	'message' => trans('Csrf token created.'),
+	'counter' => session('webi_cnt')
+]);
+```	
