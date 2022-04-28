@@ -264,3 +264,145 @@ Storage::delete(['file.jpg', 'file2.jpg']);
 
 Storage::disk('s3')->delete('path/file.jpg');
 ```
+
+## Przykłady
+
+### Instalacja Intervention Image 
+Dokumentacja na https://image.intervention.io/v2
+```sh
+composer require intervention/image
+```
+
+### Dodaj w .env, .env.testing
+Zmień główny (default) dysk na public
+```sh
+FILESYSTEM_DISK=public
+```
+
+### Wysyłanie zdjęcia na serwer i zmiana rozmiaru
+```php
+
+use Exception;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Cookie;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Session;
+use App\Models\User;
+use App\Http\Controllers\Controller;
+use App\Http\Requests\UpdateRequest;
+use Intervention\Image\ImageManagerStatic as Image;
+
+class AuthController extends Controller
+{
+    function update(UpdateRequest $r)
+	{
+		$valid = $r->validated();
+
+		if(Auth::check()) {
+			try {
+				$user = Auth::user();
+
+				if($r->hasFile('avatar'))
+				{
+					$allowed = array_diff(
+						['jpg', 'jpeg', 'png', 'webp', 'gif', 'bmp'],
+						[$r->file('avatar')->extension()]
+					);
+
+					foreach ($allowed as $ext) {
+						$f = 'avatars/' . $user->id . '.' . $ext;
+						if (Storage::exists($f)) {
+							Storage::delete($f); // Delete old images
+						}
+					}
+
+					$path = Storage::putFileAs(
+						'avatars',
+						$r->file('avatar'),
+						$user->id . '.' . $r->file('avatar')->extension()
+					);
+
+					if (Storage::exists($path)) {
+						$valid['avatar'] = $path;
+						Image::make(Storage::path($path))->resize($this->width, $this->height)->save();
+					} else {
+						unset($valid['avatar']);
+					}
+				}
+
+				User::where([
+					'id' => $user->id
+				])->update($valid);
+
+			} catch (Exception $e) {
+				report($e);
+				throw new Exception(trans('Update error'), 422);
+			}
+		}
+
+		return response()->json([
+			'message' => trans('Profil has been updated'),
+			'user' => Auth::user()->fresh()
+		]);
+	}
+}
+```
+
+### Walidacja danych
+```php
+<?php
+
+namespace App\Http\Requests\Auth;
+
+use Illuminate\Contracts\Validation\Validator;
+use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
+
+class UpdateRequest extends FormRequest
+{
+	protected $stopOnFirstFailure = true;
+
+	public function authorize()
+	{
+		if(!empty(session('locale'))){
+			app()->setLocale(session('locale'));
+		}
+
+		return true; // Allow all
+	}
+
+	public function rules()
+	{
+		$email = 'email:rfc,dns';
+		if(config('app.debug') == true) {
+			$email = 'email';
+		}
+
+		return [
+			'name' => 'required|max:50',
+			'locale' => 'sometimes|size:2',
+			'newsletter_on' => 'sometimes|boolean',
+			'bio' => 'sometimes|max:250',
+			'mobile' => 'sometimes|max:20|regex:/^[\+]{0,1}[0-9]+$/',
+			'avatar' => 'sometimes|image|mimes:jpg,png,jpeg,webp|max:2048|dimensions:min_width=1,min_height=1,max_width=1920,max_height=1080',
+		];
+	}
+
+	public function failedValidation(Validator $validator)
+	{
+		throw new \Exception($validator->errors()->first(), 422);
+	}
+
+	function prepareForValidation()
+	{
+		$this->merge(
+			collect(request()->json()->all())->only([
+				'name', 'bio', 'locale', 'mobile', 'avatar', 'newsletter_on'
+			])->toArray()
+		);
+	}
+}
+```
