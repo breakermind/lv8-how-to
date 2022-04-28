@@ -1,7 +1,7 @@
 # Exceptions Handler, Middleware Roles, CSRF Token, Remember me token
 Przechwytywanie i logowanie błędów w aplikacji.
 
-### Exceptions Handler
+## Exceptions Handler
 
 #### Json Errors
 app/Exceptions/Handler.php
@@ -76,7 +76,8 @@ class Handler extends ExceptionHandler
 	}
 }
 ```
-### Middleware
+
+## Middleware
 
 #### Migration - Utwórz migrację modelu
 ```sh
@@ -241,7 +242,7 @@ Route::prefix('web/api')->name('web.api.')->middleware(['web'])->group(function(
 });
 ```
 
-### Csrf Token
+## Csrf Token
 
 #### Wyłącz ochronę csrf dla tras
 app/Http/Middleware/VerifyCsrfToken.php
@@ -291,9 +292,9 @@ Route::post('/payment/{gateway}', [PayController::class, 'notify'])
 </head>
 ```
 
-### Zapamietaj mnie podaczas logowania (remember me token)
+## Zapamietaj mnie podaczas logowania (remember me token)
 
-#### Ustaw ciasteczko ***_remember_token***
+### Ustaw ciasteczko ***_remember_token***
 ```php
 // $name, $val, $minutes, $path, $domain, $secure, $httpOnly
 Cookie::queue(
@@ -307,7 +308,7 @@ Cookie::queue(
 );
 ```
 
-#### Zaloguj z ***_remember_token***
+### Zaloguj z ***_remember_token***
 ```php
 <?php
 if(!Auth::check()) {
@@ -332,8 +333,21 @@ if(!Auth::check()) {
 }
 ```
 
-#### Odśwież sesję
+### Usuń ciasteczko
 ```php
+<?php
+
+if(Auth::check()) {
+	$remember_me = Auth::getRecallerName();
+	$cookie = Cookie::forget($remember_me);
+}
+Session::flush();
+```
+
+### Odśwież sesję
+```php
+<?php
+
 request()->session()->regenerateToken();
 
 session(['webi_cnt' => session('webi_cnt') + 1]);
