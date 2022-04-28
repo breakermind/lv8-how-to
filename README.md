@@ -2,7 +2,7 @@
 Podstawy programowania w Laravel.
 
 0. <a href="https://github.com/breakermind/how/tree/main/p0"> Configuration, database, .env </a>
-1. <a href="https://github.com/breakermind/how/tree/main/p1"> Exceptions Handler, Middleware Roles, CSRF Token </a>
+1. <a href="https://github.com/breakermind/how/tree/main/p1"> Exceptions Handler, Middleware Roles, CSRF Token, RememberMe Token </a>
 2. <a href="https://github.com/breakermind/how/tree/main/p2"> Model, Factory, Seeder, Migration </a>
 3. <a href="https://github.com/breakermind/how/tree/main/p3"> Controller, Policy, Request Validation, Resource </a>
 4. <a href="https://github.com/breakermind/how/tree/main/p4"> Model Relations, Pivot Tables </a>
