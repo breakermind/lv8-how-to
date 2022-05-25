@@ -22,25 +22,27 @@ use Illuminate\Queue\SerializesModels;
 
 class TestMail extends Mailable
 {
-    use Queueable, SerializesModels;
+	use Queueable, SerializesModels;
 
-    /**
-     * Create a new message instance.
-     *
-     * @return void
-     */
-    public function __construct()
-    {
-        //
-    }
+	public $data = null;
+	
+	/**
+	* Create a new message instance.
+	*
+	* @return void
+	*/
+	public function __construct($data = null)
+	{
+		$this->data = $data;
+	}
 
-    /**
-     * Build the message.
-     *
-     * @return $this
-     */
-    public function build()
-    {
+	/**
+	* Build the message.
+	*
+	* @return $this
+	*/
+	public function build()
+	{
 		return $this->from('noreply@localhost', 'Newsletter')->view('email.test');
 
 		// ->with([
@@ -54,7 +56,7 @@ class TestMail extends Mailable
 		// ]);
 
 		//->attachFromStorageDisk('s3', '/path/to/file');
-    }
+	}
 }
 ```
 
