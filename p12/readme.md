@@ -10,7 +10,7 @@ Wysyłanie wiadomości email
 {{-- <img src="{{ $message->embed(url($pathToFile)) }}" alt="An inline image" /> --}}
 ```
 
-## Szablon blade and markdown
+## Szablon blade z markdown
 ```php
 @component('mail::message')
 # Order Shipped
