@@ -13,7 +13,7 @@ Podstawy programowania w Laravel.
 9. <a href="https://github.com/breakermind/how/tree/main/p9"> Testing, PHPUnit, Email Message, Image Upload and resize, Api Resources </a>
 10. <a href="https://github.com/breakermind/how/tree/main/p10"> ServiceProvider, Registry Pattern </a>
 11. <a href="https://github.com/breakermind/how/tree/main/p11"> UUID primary key with relations </a>
-12. <a href="https://github.com/breakermind/how/tree/main/p12"> Mail, User, Table Column Update </a>
+12. <a href="https://github.com/breakermind/how/tree/main/p12"> Mail, User locale, Table Column Update </a>
 
 ### Composer, git
 
