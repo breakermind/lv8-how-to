@@ -222,6 +222,48 @@ class CreateAreasTable extends Migration
 }
 ```
 
+### Aktualizacja kolumny tabeli
+```php
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+return new class extends Migration
+{
+    /**
+     * Run the migrations.
+     *
+     * @return void
+     */
+    public function up()
+    {
+        Schema::table('users', function (Blueprint $table) {
+            $table->string('locale')->nullable()->default('en');
+        });
+    }
+
+    /**
+     * Reverse the migrations.
+     *
+     * @return void
+     */
+    public function down()
+    {
+        if (Schema::hasTable('users')) {
+            if (Schema::hasColumn('users', 'locale')) {
+                Schema::table('users', function (Blueprint $table) {
+                    $table->dropColumn([
+                        'locale',
+                    ]);
+                });
+            }
+        }
+    }
+};
+```
+
 ### Utwórz tabelki w bazie danych
 ```sh
 # Single file
